@@ -28,5 +28,4 @@ done
 git add .
 git commit -m "publish commit ${commit_hash}"
 git push origin gh-pages
-rm -r _site/
 git checkout ${branch}
