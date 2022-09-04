@@ -1,0 +1,9 @@
+{% if site.data.profile.awards %}
+  <p class="title">{{ site.theme_settings.awards_title }}</p>
+  <ul class="awards-list">
+    {% for award in site.data.profile.awards %}
+    <li class="award">{{ award.name }}</li>
+    <li class="award-description">{{ award.description }} {% if award.github %} <a href="{{ award.github }}" class="award-link">[GitHub]</a> {% endif %}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
