@@ -12,6 +12,7 @@ if [ ! -f "_config.yml" ]; then
 fi
 
 git checkout gh-pages
+git fetch --all
 git pull origin master
 commit_hash=$(git rev-parse HEAD)
 branch=$(git rev-parse --abbrev-ref HEAD)
