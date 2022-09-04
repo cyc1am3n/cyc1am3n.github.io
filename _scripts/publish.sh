@@ -11,6 +11,8 @@ if [ ! -f "_config.yml" ]; then
   exit 1
 fi
 
+git checkout gh-pages
+git pull origin master
 commit_hash=$(git rev-parse HEAD)
 branch=$(git rev-parse --abbrev-ref HEAD)
 if [ -d "_scripts/publish.d" ]; then
@@ -18,8 +20,6 @@ if [ -d "_scripts/publish.d" ]; then
   cp -r "_scripts/publish.d" "/tmp/publish.d"
 fi
 bundle exec jekyll b -d /tmp/gh-pages-publish
-git checkout gh-pages
-git pull origin master
 git ls-files -z -- . ':!:.git*' | xargs -0 rm -f
 cp -r /tmp/gh-pages-publish/* .
 for script in "/tmp/publish.d/*"; do
