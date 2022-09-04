@@ -13,6 +13,7 @@ fi
 
 git checkout gh-pages
 git fetch --all
+git reset --hard origin/master
 git pull origin master
 commit_hash=$(git rev-parse HEAD)
 branch=$(git rev-parse --abbrev-ref HEAD)
