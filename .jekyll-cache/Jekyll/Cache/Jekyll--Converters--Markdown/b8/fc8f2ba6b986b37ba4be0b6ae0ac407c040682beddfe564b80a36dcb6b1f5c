@@ -1,0 +1,956 @@
+I"G(<p>이번에는 캐글의 입문자를 위한 튜토리얼 문제라고 할 수 있는 <a href="https://www.kaggle.com/c/titanic/">Titanic: Machine Learning from Disaster</a> 의 예측 모델을 python으로 풀어보는 과정에 대해서 포스트를 할 것이다.</p>
+
+<p>해당 포스팅에서 사용한 코드는 <a href="https://github.com/cyc1am3n/kaggle_study/blob/master/01_titanic/01_titanic.ipynb">여기</a>에서도 확인 할 수 있다.</p>
+
+<hr />
+
+<h2 id="contents">Contents</h2>
+
+<ol>
+  <li>
+    <p><a href="#1-문제-정의하기">문제 정의하기</a></p>
+  </li>
+  <li>
+    <p><a href="#2-데이터-불러오기">데이터 불러오기</a></p>
+  </li>
+  <li>
+    <p><a href="#3-데이터-분석">데이터 분석</a></p>
+  </li>
+  <li>
+    <p><a href="#4-데이터-전처리-및-특성-추출">데이터 전처리 및 특성 추출</a></p>
+  </li>
+  <li>
+    <p><a href="#5-모델-설계-및-학습">모델 설계 및 학습</a></p>
+  </li>
+  <li>
+    <p><a href="#6-마무리">마무리</a></p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="1-문제-정의하기">1. 문제 정의하기</h2>
+
+<p><img src="https://static1.squarespace.com/static/5006453fe4b09ef2252ba068/t/5090b249e4b047ba54dfd258/1351660113175/TItanic-Survival-Infographic.jpg?format=1500w" alt="What caused the 'unsinkable' Titanic, built with the latest 20th century technology, including 16 watertight compartments, to actually go down?" class="center-95" /><br />
+<span class="caption">What caused the ‘unsinkable’ Titanic, built with the latest 20th century technology, including 16 watertight compartments, to actually go down?</span></p>
+
+<p>타이타닉 호에서 탑승했던 사람들의 정보를 바탕으로 생존자를 예측하는 문제이다.<br />
+이 문제를 풀기 위해서, 여러 가지 머신러닝 스킬들을 사용해야 할 것이다.</p>
+
+<hr />
+
+<h2 id="2-데이터-불러오기">2. 데이터 불러오기</h2>
+
+<p>먼저 필요한 라이브러리인 <code class="language-plaintext highlighter-rouge">numpy</code>와 <code class="language-plaintext highlighter-rouge">pandas</code>를 import하고, 데이터(train.csv, test.csv) 파일을 코드와 같은 디렉토리에 다운을 받고 <code class="language-plaintext highlighter-rouge">pd.read_csv</code> 를 이용해서 불러오자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'train.csv'</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'test.csv'</span><span class="p">)</span></code></pre></figure>
+
+<p>데이터가 제대로 불러와졌는지를 확인해 보려면 <code class="language-plaintext highlighter-rouge">train.head()</code>를 실행시켜 보면 되는데, 위에서 불러온 train이라는 dataframe 중에서 앞의 5개의 열을 출력시킬 수 있다. 또한 정수 값을 parameter로 받아 그 만큼의 열을 보여준다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train</span><span class="p">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th…</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="3-데이터-분석">3. 데이터 분석</h2>
+
+<p>일단 제대로 데이터 분석을 하기 전에 캐글에서 제공되는 <code class="language-plaintext highlighter-rouge">Data Dictionary</code>를 살펴 보자.<br />
+<code class="language-plaintext highlighter-rouge">SipSp</code>나 <code class="language-plaintext highlighter-rouge">Parch</code>같이 변수명의 의미을 바로 알 수가 없을 때나, Categorical feature의 변수값의 의미를 얻을 때 도움이 된다.</p>
+
+<blockquote>
+  <h3 id="data-dictionary-from-kaggle">Data Dictionary from Kaggle<a href="https://www.kaggle.com/c/titanic/data">¶</a></h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Definition</th>
+        <th>Key</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Survived</td>
+        <td>Survival</td>
+        <td>0 = No, 1 = Yes</td>
+      </tr>
+      <tr>
+        <td>Pclass</td>
+        <td>Ticket class</td>
+        <td>1 = 1st, 2 = 2nd, 3 = 3rd</td>
+      </tr>
+      <tr>
+        <td>Sex</td>
+        <td>Sex</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Age</td>
+        <td>Age in years</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>SibSp</td>
+        <td># of siblings / spouses aboard the Titanic</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Parch</td>
+        <td># of parents / children aboard the Titanic</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Ticket</td>
+        <td>Ticket number</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Fare</td>
+        <td>Passenger fare</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Cabin</td>
+        <td>Cabin number</td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Embarked</td>
+        <td>Port of Embarkation</td>
+        <td>C = Cherbourg, Q = Queenstown, S = Southampton</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 id="variable-notes">Variable Notes</h4>
+
+  <p><strong>Pclass</strong>: A proxy for socio-economic status (SES)
+1st = Upper
+2nd = Middle
+3rd = Lower</p>
+
+  <p><strong>Age</strong>: Age is fractional if less than 1. If the age is estimated, is it in the form of xx.5</p>
+
+  <p><strong>SibSp</strong>: The dataset defines family relations in this way…<br />
+Sibling = brother, sister, stepbrother, stepsister<br />
+Spouse = husband, wife (mistresses and fiancés were ignored)</p>
+
+  <p><strong>Parch</strong>: The dataset defines family relations in this way…<br />
+Parent = mother, father<br />
+Child = daughter, son, stepdaughter, stepson<br />
+Some children travelled only with a nanny, therefore parch=0 for them.</p>
+</blockquote>
+
+<p>위의 Data Dictionary를 살펴보면 승객 데이터에서 제공되는 특성은 10가지가 있는데, 그 중에서 의미를 바로 알기 힘든 것 들을 살펴보자.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Survivied</code>는 생존 여부(0은 사망, 1은 생존; train 데이터에서만 제공),<br />
+<code class="language-plaintext highlighter-rouge">Pclass</code>는 사회경제적 지위(1에 가까울 수록 높음),<br />
+<code class="language-plaintext highlighter-rouge">SipSp</code>는 배우자나 형제 자매 명 수의 총 합,<br />
+<code class="language-plaintext highlighter-rouge">Parch</code>는 부모 자식 명 수의 총 합을 나타낸다.</p>
+
+<p>이제 각각 특성들의 의미를 알았으니, 주어진 데이터에서 대해 간략하게 살펴보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s">'train data shape: '</span><span class="p">,</span> <span class="n">train</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'test data shape: '</span><span class="p">,</span> <span class="n">test</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'----------[train infomation]----------'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">train</span><span class="p">.</span><span class="n">info</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'----------[test infomation]----------'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="p">.</span><span class="n">info</span><span class="p">())</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train</span> <span class="n">data</span> <span class="n">shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">891</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">test</span> <span class="n">data</span> <span class="n">shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">418</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="o">----------</span><span class="p">[</span><span class="n">train</span> <span class="n">infomation</span><span class="p">]</span><span class="o">----------</span>
+<span class="o">&lt;</span><span class="k">class</span> <span class="err">'</span><span class="nc">pandas</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">DataFrame</span><span class="s">'&gt;
+RangeIndex: 891 entries, 0 to 890
+Data columns (total 12 columns):
+PassengerId    891 non-null int64
+Survived       891 non-null int64
+Pclass         891 non-null int64
+Name           891 non-null object
+Sex            891 non-null object
+Age            714 non-null float64
+SibSp          891 non-null int64
+Parch          891 non-null int64
+Ticket         891 non-null object
+Fare           891 non-null float64
+Cabin          204 non-null object
+Embarked       889 non-null object
+dtypes: float64(2), int64(5), object(5)
+memory usage: 83.6+ KB
+None
+----------[test infomation]----------
+&lt;class '</span><span class="n">pandas</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">DataFrame</span><span class="s">'&gt;
+RangeIndex: 418 entries, 0 to 417
+Data columns (total 11 columns):
+PassengerId    418 non-null int64
+Pclass         418 non-null int64
+Name           418 non-null object
+Sex            418 non-null object
+Age            332 non-null float64
+SibSp          418 non-null int64
+Parch          418 non-null int64
+Ticket         418 non-null object
+Fare           417 non-null float64
+Cabin          91 non-null object
+Embarked       418 non-null object
+dtypes: float64(2), int64(4), object(5)
+memory usage: 36.0+ KB
+None</span></code></pre></figure>
+
+<p>이제 위에서 살펴본 특성들이 생존에 미치는 영향에 대해서 생각해보자.</p>
+
+<p>먼저 데이터 값의 분포를 보기 위해서 아래와 같은 라이브러리를 불러오자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+<span class="n">sns</span><span class="p">.</span><span class="nb">set</span><span class="p">()</span> <span class="c1"># setting seaborn default for plots</span></code></pre></figure>
+
+<p>일단 당장 seaborn은 사용하지 않을 거긴 한데, 다음 포스팅에서 이를 다룰 예정이다.</p>
+
+<h3 id="3-1-pie-chart-for-categorical-feature">3-1. Pie chart for Categorical Feature</h3>
+
+<p>먼저 다음과 같은 Categorical Feature의 분포를 보기 위해서 Pie chart를 만드는 함수를 정의해보자.</p>
+
+<ul>
+  <li>Sex</li>
+  <li>Pclass</li>
+  <li>Embarked</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">pie_chart</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<span class="err">​</span>    <span class="n">feature_ratio</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">feature</span><span class="p">].</span><span class="n">value_counts</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">feature_size</span> <span class="o">=</span> <span class="n">feature_ratio</span><span class="p">.</span><span class="n">size</span>
+<span class="err">​</span>    <span class="n">feature_index</span> <span class="o">=</span> <span class="n">feature_ratio</span><span class="p">.</span><span class="n">index</span>
+<span class="err">​</span>    <span class="n">survived</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s">'Survived'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="n">feature</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="err">​</span>    <span class="n">dead</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s">'Survived'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="n">feature</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="err">​</span>    
+
+<span class="err">​</span>    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="s">'auto'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">plt</span><span class="p">.</span><span class="n">pie</span><span class="p">(</span><span class="n">feature_ratio</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">feature_index</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s">'%1.1f%%'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="n">feature</span> <span class="o">+</span> <span class="s">'</span><span class="se">\'</span><span class="s">s ratio in total'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="err">​</span>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">feature_index</span><span class="p">):</span>
+<span class="err">​</span>        <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">feature_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s">'equal'</span><span class="p">)</span>
+<span class="err">​</span>        <span class="n">plt</span><span class="p">.</span><span class="n">pie</span><span class="p">([</span><span class="n">survived</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">dead</span><span class="p">[</span><span class="n">index</span><span class="p">]],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">'Survivied'</span><span class="p">,</span> <span class="s">'Dead'</span><span class="p">],</span> <span class="n">autopct</span><span class="o">=</span><span class="s">'%1.1f%%'</span><span class="p">)</span>
+<span class="err">​</span>        <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s">'</span><span class="se">\'</span><span class="s">s ratio'</span><span class="p">)</span>
+
+<span class="err">​</span>    <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
+
+<p>먼저 <code class="language-plaintext highlighter-rouge">Sex</code>에 대해 Pie Chart를 그려보자면,</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pie_chart</span><span class="p">(</span><span class="s">'Sex'</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/img/posts/titanic/pie-sex.png" alt="Pie Chart for Sex feature." class="center-50" /><br />
+<span class="caption">Pie Chart for Sex feature.</span></p>
+
+<p>위와 같이 남성이 여성보다 배에 많이 탔으며,  <code class="language-plaintext highlighter-rouge">남성</code>보다 <code class="language-plaintext highlighter-rouge">여성</code>의 생존 비율이 높다는 것을 알 수가 있다.</p>
+
+<p>이제 사회경제적 지위인 <code class="language-plaintext highlighter-rouge">Pclass</code>에 대해서도 그려보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pie_chart</span><span class="p">(</span><span class="s">'Pclass'</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/img/posts/titanic/pie-pclass.png" alt="Pie Chart for Pclass feature." class="center-50" /><br />
+<span class="caption">Pie Chart for Pclass feature.</span></p>
+
+<p>위와 같이 Pclass가 3인 사람들의 수가 가장 많았으며,  <code class="language-plaintext highlighter-rouge">Pclass</code>가 <code class="language-plaintext highlighter-rouge">높을수록</code>(숫자가 작을수록; 사회경제적 지위가 높을수록) 생존 비율이 높다는 것을 알 수 있다.</p>
+
+<p>마지막으로 어느 곳에서 배를 탔는지를 나타내는 <code class="language-plaintext highlighter-rouge">Embarked</code>에 대해서 살펴보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pie_chart</span><span class="p">(</span><span class="s">'Embarked'</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/img/posts/titanic/pie-embarked.png" alt="Pie Chart for Embarked feature." class="center-50" /><br />
+<span class="caption">Pie Chart for Embarked feature.</span></p>
+
+<p>위와 같이 <code class="language-plaintext highlighter-rouge">Southampton</code>에서 선착한 사람이 가장 많았으며, <code class="language-plaintext highlighter-rouge">Cherbourg</code>에서 탄 사람 중에서는 생존한 사람의 비율이 높았고, 나머지 두 선착장에서 탄 사람들은 생존한 사람보다 그렇지 못한 사람이 조금 더 많았다.</p>
+
+<h3 id="3-2-bar-chart-for-categorical-feature">3-2. Bar chart for Categorical feature</h3>
+
+<p>이번에는 아래의 특성들에 대해서 Bar chart를 정의해서 데이터를 시각화 해보자.</p>
+
+<ul>
+  <li>SibSp ( # of siblings and spouse)</li>
+  <li>Parch ( # of parents and children)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">bar_chart</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<span class="err">​</span>    <span class="n">survived</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s">'Survived'</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">][</span><span class="n">feature</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="err">​</span>    <span class="n">dead</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s">'Survived'</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">][</span><span class="n">feature</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="err">​</span>    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">survived</span><span class="p">,</span><span class="n">dead</span><span class="p">])</span>
+<span class="err">​</span>    <span class="n">df</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Survived'</span><span class="p">,</span><span class="s">'Dead'</span><span class="p">]</span>
+<span class="err">​</span>    <span class="n">df</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'bar'</span><span class="p">,</span><span class="n">stacked</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span></code></pre></figure>
+
+<p>먼저 <code class="language-plaintext highlighter-rouge">SibSp</code>에 대해서 Bar chart를 그려보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">bar_chart</span><span class="p">(</span><span class="s">"SibSp"</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/img/posts/titanic/bar-sibsp.png" alt="Bar Chart for SibSp feature." class="center-95" /><br />
+<span class="caption">Bar Chart for SibSp feature.</span></p>
+
+<p>위와 같이 2명 이상의 형제나 배우자와 함께 배에 탔을 경우 생존한 사람의 비율이 <code class="language-plaintext highlighter-rouge">컸다</code>는 것을 볼 수 있고, 그렇지 않을 경우에는 생존한 사람의 비율이 <code class="language-plaintext highlighter-rouge">적었다</code>는 것을 볼 수 있다.</p>
+
+<p>이제 <code class="language-plaintext highlighter-rouge">Parch</code>에 대해서도 Bar chart를 그려보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">bar_chart</span><span class="p">(</span><span class="s">"Parch"</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/img/posts/titanic/bar-parch.png" alt="Bar Chart for Parch feature." class="center-95" /><br />
+<span class="caption">Bar Chart for Parch feature.</span></p>
+
+<p><code class="language-plaintext highlighter-rouge">Parch</code>특성은 <code class="language-plaintext highlighter-rouge">SibSp</code>와 비슷하게 2명 이상의 부모나 자식과 함께 배에 탔을 때는 조금 더 생존했지만, 그렇지 않을 경우에는 생존한 사람의 비율이 적었다.</p>
+
+<p>지금까지 살펴본 데이터 특성들을 간략하게 종합해보면,<br />
+성별이 여성일 수록(영화 <em>타이타닉</em>에서 나온 것 처럼 여성과 아이부터 먼저 살렸기 때문이 아닐까 싶고),<br />
+Pclass가 높을 수록(맨 위의 사진을 보면 타이타닉 호는 배의 후미부터 잠기기 시작되었다는 것을 알 수 있는데, 티켓의 등급이 높아질 수록 숙소가 배의 앞쪽과 위쪽으로 가는 경향이 있어 그 영향이 아닐까 싶고),<br />
+Cherbourg 선착장에서 배를 탔다면,<br />
+형제, 자매, 배우자, 부모, 자녀와 함께 배에 탔다면,<br />
+생존 확률이 더 높았다는 것을 볼 수 있다.</p>
+
+<p>하지만 하나의 특성과 생존 비율 만을 생각해서 예측하기에는 무리가 있다.</p>
+
+<p>예를 들어 높은 금액의 티켓(살 확률이 높은 숙소를 가진)을 산 부유한 사람이 가족들이랑 왔을 경우가 많다고 가정해본다면, 가족들과 함께 왔다고 해서 살 가능성이 높다고 할 수는 없으므로 단일 특성을 가지고 생존 확률을 예측하기보단 여러가지 특성을 종합해서 예측을 하는 것이 더 좋을 것이다.</p>
+
+<hr />
+
+<h2 id="4-데이터-전처리-및-특성-추출">4. 데이터 전처리 및 특성 추출</h2>
+
+<p>이제는 앞으로 예측할 모델에게 학습을 시킬 특성들을 골라서 학습하기에 알맞게 전처리 과정을 진행 해볼 것이다.</p>
+
+<p>일단 우리가 선택할 특성은 <code class="language-plaintext highlighter-rouge">Name</code>, <code class="language-plaintext highlighter-rouge">Sex</code>, <code class="language-plaintext highlighter-rouge">Embarked</code>, <code class="language-plaintext highlighter-rouge">Age</code>, <code class="language-plaintext highlighter-rouge">SibSp</code>, <code class="language-plaintext highlighter-rouge">Parch</code>, <code class="language-plaintext highlighter-rouge">Fare</code>, <code class="language-plaintext highlighter-rouge">Pclass</code>이며, <code class="language-plaintext highlighter-rouge">Ticket</code>과 <code class="language-plaintext highlighter-rouge">Cabin</code>에 대한 의미는 아직 찾지 못했으므로 데이터 세트에서 제외하도록 하겠다.</p>
+
+<p>또한 데이터 전처리를 하는 과정에서는 train과 test 데이터를 같은 방법으로 한 번에 처리를 해야하므로 먼저 두 개의 데이터를 합쳐보도록하자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train_and_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">]</span></code></pre></figure>
+
+<h3 id="4-1-name-feature">4-1. Name Feature</h3>
+
+<p>이름이 사실 중요하지 않은 특성이라 생각 할 수도 있는데, 데이터에서 제공되는 승객들의 이름에는 Title이 존재한다.</p>
+
+<p>예를 들면, <em>Heikkinen, Miss. Laina</em>라는 이름에는 <strong>Miss</strong>라는 Title이 있는데, 이를 통해서 승객의 성별이나 나이대, 결혼 유무를 알 수가 있다.</p>
+
+<p>사실 성별이랑 나이는 이미 데이터에 들어있는 정보라서 예측 성능에 그렇게 큰 영향이 있을 것 같지는 않지만 일단 이름에서 Title을 가져오도록 해보자.</p>
+
+<p>데이터에 <code class="language-plaintext highlighter-rouge">Title</code>이라는 새로운 열을 만들어 <code class="language-plaintext highlighter-rouge">Title</code>에서 추출한 Title을 넣어주자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>	<span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nb">str</span><span class="p">.</span><span class="n">extract</span><span class="p">(</span><span class="s">' ([A-Za-z]+)\.'</span><span class="p">)</span>
+
+<span class="n">train</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span></code></pre></figure>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>Mr</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th…</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>C</td>
+      <td>Mrs</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>Miss</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>S</td>
+      <td>Mrs</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>Mr</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>위에서 쓰인 <strong>’ ([A-Za-z]+).‘</strong>는 정규표현식인데, 공백으로 시작하고, <code class="language-plaintext highlighter-rouge">.</code>으로 끝나는 문자열을 추출할 때 저렇게 표현을 한다.</p>
+
+<p>한편 추출한 Title을 가진 사람이 몇 명이 존재하는지 성별과 함께 표현을 해보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pd</span><span class="p">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="s">'Title'</span><span class="p">],</span> <span class="n">train</span><span class="p">[</span><span class="s">'Sex'</span><span class="p">])</span></code></pre></figure>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sex</th>
+      <th>female</th>
+      <th>male</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Title</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Capt</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Col</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Countess</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Don</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Dr</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Jonkheer</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Lady</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Major</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Master</td>
+      <td>0</td>
+      <td>40</td>
+    </tr>
+    <tr>
+      <td>Miss</td>
+      <td>182</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mlle</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mme</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mr</td>
+      <td>0</td>
+      <td>517</td>
+    </tr>
+    <tr>
+      <td>Mrs</td>
+      <td>125</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Ms</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rev</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Sir</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>여기에서 흔하지 않은 Title은 Other로 대체하고 중복되는 표현을 통일하자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">].</span><span class="n">replace</span><span class="p">([</span><span class="s">'Capt'</span><span class="p">,</span> <span class="s">'Col'</span><span class="p">,</span> <span class="s">'Countess'</span><span class="p">,</span> <span class="s">'Don'</span><span class="p">,</span><span class="s">'Dona'</span><span class="p">,</span> <span class="s">'Dr'</span><span class="p">,</span> <span class="s">'Jonkheer'</span><span class="p">,</span>
+<span class="err">​</span>                                                 <span class="s">'Lady'</span><span class="p">,</span><span class="s">'Major'</span><span class="p">,</span> <span class="s">'Rev'</span><span class="p">,</span> <span class="s">'Sir'</span><span class="p">],</span> <span class="s">'Other'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="s">'Mlle'</span><span class="p">,</span> <span class="s">'Miss'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="s">'Mme'</span><span class="p">,</span> <span class="s">'Mrs'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="s">'Ms'</span><span class="p">,</span> <span class="s">'Miss'</span><span class="p">)</span>
+
+<span class="n">train</span><span class="p">[[</span><span class="s">'Title'</span><span class="p">,</span> <span class="s">'Survived'</span><span class="p">]].</span><span class="n">groupby</span><span class="p">([</span><span class="s">'Title'</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span></code></pre></figure>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Title</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Master</td>
+      <td>0.575000</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Miss</td>
+      <td>0.702703</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Mr</td>
+      <td>0.156673</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Mrs</td>
+      <td>0.793651</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Other</td>
+      <td>0.347826</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>그리고 추출한 Title 데이터를 학습하기 알맞게 String Data로 변형해주면 된다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Title'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="4-2-sex-feature">4-2. Sex Feature</h3>
+
+<p>이번에는 승객의 성별을 나타내는 <code class="language-plaintext highlighter-rouge">Sex</code> Feature를 처리할 것인데 이미 male과 female로 나뉘어져 있으므로 String Data로만 변형해주면 된다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Sex'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Sex'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="4-3-embarked-feature">4-3. Embarked Feature</h3>
+
+<p>이제 배를 탑승한 선착장을 나타내는 <code class="language-plaintext highlighter-rouge">Embarked</code> Feature를 처리해보자.</p>
+
+<p>일단 위에서 간략하게 살펴본 데이터 정보에 따르면 train 데이터에서 Embarked feature에는 NaN 값이 존재하며, 다음을 보면 잘 알 수 있다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train</span><span class="p">.</span><span class="n">Embared</span><span class="p">.</span><span class="n">value_count</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">S</span>      <span class="mi">644</span>
+<span class="n">C</span>      <span class="mi">168</span>
+<span class="n">Q</span>       <span class="mi">77</span>
+<span class="n">NaN</span>      <span class="mi">2</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">Embarked</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">value_count()</code>에서 dropna를 False로 해주면 NaN 값을 포함한 갯수의 총합을 세준다.</p>
+
+<p>한편 위에서 보았던 <code class="language-plaintext highlighter-rouge">Embarked</code> Feature의 분포를 살펴보면 S가 대부분인데, 빠져있는 두 개의 데이터도 거기에 속할 확률이 크므로 S로 넣어주고 String Data로 변형해주자.</p>
+
+<p>이런 방법 외에도 값이 누락된 데이터를 처리하는 방법은 여러가지가 있는데, 자세한 내용은 <a href="https://towardsdatascience.com/how-to-handle-missing-data-8646b18db0d4">여기</a>를 참조하자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Embarked'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Embarked'</span><span class="p">].</span><span class="n">fillna</span><span class="p">(</span><span class="s">'S'</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Embarked'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Embarked'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="4-4-age-feature">4-4. Age Feature</h3>
+
+<p><code class="language-plaintext highlighter-rouge">Age</code> Feature에도 NaN값은 존재하는데, 일단 빠진 값에는 나머지 모든 승객 나이의 평균을 넣어주자.</p>
+
+<p>한편 연속적인 numeric data를 처리하는 방법에도 여러가지가 있는데, 이번에는 <code class="language-plaintext highlighter-rouge">Binning</code>을 사용할 것이다.</p>
+
+<p>Binnig이란 여러 종류의 데이터에 대해 범위를 지정해주거나 카테고리를 통해 이전보다 작은 수의 그룹으로 만드는 기법이다.</p>
+
+<p>이를 통해서 단일성 분포의 왜곡을 막을 수 있지만, 이산화를 통한 데이터의 손실이라는 단점도 존재한다.</p>
+
+<p>이번에는 <code class="language-plaintext highlighter-rouge">pd.cut()</code>을 이용해 같은 길이의 구간을 가지는 다섯 개의 그룹을 만들어 보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">].</span><span class="n">fillna</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">].</span><span class="n">mean</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">train</span><span class="p">[</span><span class="s">'AgeBand'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">cut</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="s">'Age'</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">train</span><span class="p">[[</span><span class="s">'AgeBand'</span><span class="p">,</span> <span class="s">'Survived'</span><span class="p">]].</span><span class="n">groupby</span><span class="p">([</span><span class="s">'AgeBand'</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">mean</span><span class="p">())</span> <span class="c1"># Survivied ratio about Age Band</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="err">​</span>         <span class="n">AgeBand</span>  <span class="n">Survived</span>
+<span class="mi">0</span>  <span class="p">(</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">]</span>  <span class="mf">0.550000</span>
+<span class="mi">1</span>   <span class="p">(</span><span class="mf">16.0</span><span class="p">,</span> <span class="mf">32.0</span><span class="p">]</span>  <span class="mf">0.344762</span>
+<span class="mi">2</span>   <span class="p">(</span><span class="mf">32.0</span><span class="p">,</span> <span class="mf">48.0</span><span class="p">]</span>  <span class="mf">0.403226</span>
+<span class="mi">3</span>   <span class="p">(</span><span class="mf">48.0</span><span class="p">,</span> <span class="mf">64.0</span><span class="p">]</span>  <span class="mf">0.434783</span>
+<span class="mi">4</span>   <span class="p">(</span><span class="mf">64.0</span><span class="p">,</span> <span class="mf">80.0</span><span class="p">]</span>  <span class="mf">0.090909</span></code></pre></figure>
+
+<p>이제 <code class="language-plaintext highlighter-rouge">Age</code>에 들어 있는 값을 위에서 구한 구간에 속하도록 바꿔준다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">16</span><span class="p">,</span> <span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">32</span><span class="p">),</span> <span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">48</span><span class="p">),</span> <span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">48</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">64</span><span class="p">),</span> <span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">64</span><span class="p">,</span> <span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Age'</span><span class="p">].</span><span class="nb">map</span><span class="p">(</span> <span class="p">{</span> <span class="mi">0</span><span class="p">:</span> <span class="s">'Child'</span><span class="p">,</span>  <span class="mi">1</span><span class="p">:</span> <span class="s">'Young'</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s">'Middle'</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s">'Prime'</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s">'Old'</span><span class="p">}</span> <span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></code></pre></figure>
+
+<p>여기서 <code class="language-plaintext highlighter-rouge">Age</code>값을 numeric이 아닌 string 형식으로 넣어주었는데, 숫자에 대한 경향성을 가지고 싶지 않아서 그렇게 했다.</p>
+
+<p>사실 Binning과 같이 여기에도 장단점이 존재하는 것 같아 다음번에는 Numeric type으로 학습시켜서 어떻게 예측 결과가 달라지는지도 봐야겠다.</p>
+
+<h3 id="4-5-fare-feature">4-5. Fare Feature</h3>
+
+<p>Test 데이터 중에서 <code class="language-plaintext highlighter-rouge">Fare</code> Feature에도 NaN 값이 하나 존재하는데, Pclass와 Fare가 어느 정도 연관성이 있는 것 같아 Fare 데이터가 빠진 값의 Pclass를 가진 사람들의 평균 Fare를 넣어주는 식으로 처리를 해보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span> <span class="p">(</span><span class="n">train</span><span class="p">[[</span><span class="s">'Pclass'</span><span class="p">,</span> <span class="s">'Fare'</span><span class="p">]].</span><span class="n">groupby</span><span class="p">([</span><span class="s">'Pclass'</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">mean</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s">""</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">test</span><span class="p">[</span><span class="s">"Fare"</span><span class="p">].</span><span class="n">isnull</span><span class="p">()][</span><span class="s">"Pclass"</span><span class="p">])</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python">   <span class="n">Pclass</span>       <span class="n">Fare</span>
+<span class="mi">0</span>       <span class="mi">1</span>  <span class="mf">84.154687</span>
+<span class="mi">1</span>       <span class="mi">2</span>  <span class="mf">20.662183</span>
+<span class="mi">2</span>       <span class="mi">3</span>  <span class="mf">13.675550</span>
+
+<span class="mi">152</span>    <span class="mi">3</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">Pclass</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span></code></pre></figure>
+
+<p>위에서 볼 수 있듯이 누락된 데이터의 Pclass는 3이고, train 데이터에서 Pclass가 3인 사람들의 평균 Fare가 13.675550이므로 이 값을 넣어주자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">].</span><span class="n">fillna</span><span class="p">(</span><span class="mf">13.675</span><span class="p">)</span> <span class="c1"># The only one empty fare data's pclass is 3.</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">Age</code>에서 했던 것처럼 <code class="language-plaintext highlighter-rouge">Fare</code>에서도 Binning을 해보자. 이번에는 <code class="language-plaintext highlighter-rouge">Age</code>에서 했던 것 과는 다르게 Numeric한 값으로 남겨두자. (아까와 달리 이렇게 한 이유는 없음. ^^;)</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">7.854</span><span class="p">,</span> <span class="s">'Fare'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">7.854</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">10.5</span><span class="p">),</span> <span class="s">'Fare'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">10.5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">21.679</span><span class="p">),</span> <span class="s">'Fare'</span><span class="p">]</span>   <span class="o">=</span> <span class="mi">2</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">21.679</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">39.688</span><span class="p">),</span> <span class="s">'Fare'</span><span class="p">]</span>   <span class="o">=</span> <span class="mi">3</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">39.688</span><span class="p">,</span> <span class="s">'Fare'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Fare'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="4-6-sibsp--parch-feature-family">4-6. SibSp &amp; Parch Feature (Family)</h3>
+
+<p>위에서 살펴봤듯이 형제, 자매, 배우자, 부모님, 자녀의 수가 많을 수록 생존한 경우가 많았는데, 두 개의 Feature를 합쳐서 <code class="language-plaintext highlighter-rouge">Family</code>라는 Feature로 만들자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">train_and_test</span><span class="p">:</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">"Family"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">"Parch"</span><span class="p">]</span> <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span><span class="s">"SibSp"</span><span class="p">]</span>
+<span class="err">​</span>    <span class="n">dataset</span><span class="p">[</span><span class="s">'Family'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s">'Family'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="4-7-특성-추출-및-나머지-전처리">4-7. 특성 추출 및 나머지 전처리</h3>
+
+<p>이제 사용할 Feature에 대해서는 전처리가 되었으니, 학습시킬때 제외시킬 Feature들을 Drop 시키자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">features_drop</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Name'</span><span class="p">,</span> <span class="s">'Ticket'</span><span class="p">,</span> <span class="s">'Cabin'</span><span class="p">,</span> <span class="s">'SibSp'</span><span class="p">,</span> <span class="s">'Parch'</span><span class="p">]</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">features_drop</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">test</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">features_drop</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'PassengerId'</span><span class="p">,</span> <span class="s">'AgeBand'</span><span class="p">,</span> <span class="s">'FareBand'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">train</span><span class="p">.</span><span class="n">head</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="p">.</span><span class="n">head</span><span class="p">())</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python">   <span class="n">Survived</span>  <span class="n">Pclass</span>     <span class="n">Sex</span>     <span class="n">Age</span>  <span class="n">Fare</span> <span class="n">Embarked</span> <span class="n">Title</span>  <span class="n">Family</span>
+<span class="mi">0</span>         <span class="mi">0</span>       <span class="mi">3</span>    <span class="n">male</span>   <span class="n">Young</span>     <span class="mi">0</span>        <span class="n">S</span>    <span class="n">Mr</span>       <span class="mi">1</span>
+<span class="mi">1</span>         <span class="mi">1</span>       <span class="mi">1</span>  <span class="n">female</span>  <span class="n">Middle</span>     <span class="mi">4</span>        <span class="n">C</span>   <span class="n">Mrs</span>       <span class="mi">1</span>
+<span class="mi">2</span>         <span class="mi">1</span>       <span class="mi">3</span>  <span class="n">female</span>   <span class="n">Young</span>     <span class="mi">1</span>        <span class="n">S</span>  <span class="n">Miss</span>       <span class="mi">0</span>
+<span class="mi">3</span>         <span class="mi">1</span>       <span class="mi">1</span>  <span class="n">female</span>  <span class="n">Middle</span>     <span class="mi">4</span>        <span class="n">S</span>   <span class="n">Mrs</span>       <span class="mi">1</span>
+<span class="mi">4</span>         <span class="mi">0</span>       <span class="mi">3</span>    <span class="n">male</span>  <span class="n">Middle</span>     <span class="mi">1</span>        <span class="n">S</span>    <span class="n">Mr</span>       <span class="mi">0</span>
+   <span class="n">PassengerId</span>  <span class="n">Pclass</span>     <span class="n">Sex</span>     <span class="n">Age</span>  <span class="n">Fare</span> <span class="n">Embarked</span> <span class="n">Title</span>  <span class="n">Family</span>
+<span class="mi">0</span>          <span class="mi">892</span>       <span class="mi">3</span>    <span class="n">male</span>  <span class="n">Middle</span>     <span class="mi">0</span>        <span class="n">Q</span>    <span class="n">Mr</span>       <span class="mi">0</span>
+<span class="mi">1</span>          <span class="mi">893</span>       <span class="mi">3</span>  <span class="n">female</span>  <span class="n">Middle</span>     <span class="mi">0</span>        <span class="n">S</span>   <span class="n">Mrs</span>       <span class="mi">1</span>
+<span class="mi">2</span>          <span class="mi">894</span>       <span class="mi">2</span>    <span class="n">male</span>   <span class="n">Prime</span>     <span class="mi">1</span>        <span class="n">Q</span>    <span class="n">Mr</span>       <span class="mi">0</span>
+<span class="mi">3</span>          <span class="mi">895</span>       <span class="mi">3</span>    <span class="n">male</span>   <span class="n">Young</span>     <span class="mi">1</span>        <span class="n">S</span>    <span class="n">Mr</span>       <span class="mi">0</span>
+<span class="mi">4</span>          <span class="mi">896</span>       <span class="mi">3</span>  <span class="n">female</span>   <span class="n">Young</span>     <span class="mi">2</span>        <span class="n">S</span>   <span class="n">Mrs</span>       <span class="mi">2</span></code></pre></figure>
+
+<p>그러면 위와 같이 가공된 train, test 데이터를 볼 수 있다.</p>
+
+<p>마지막으로 Categorical Feature에 대해 one-hot encoding과 train data와 label을 분리시키는 작업을 하면 예측 모델에 학습시킬 준비가 끝났다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># One-hot-encoding for categorical variables
+</span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+
+<span class="n">train_label</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Survived'</span><span class="p">]</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'Survived'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">test</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"PassengerId"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">copy</span><span class="p">()</span></code></pre></figure>
+
+<hr />
+
+<h2 id="5-모델-설계-및-학습">5. 모델 설계 및 학습</h2>
+
+<p>이번에 사용할 예측 모델은 다음과 같이 5가지가 있다.</p>
+
+<ol>
+  <li>Logistic Regression</li>
+  <li>Support Vector Machine (SVM)</li>
+  <li>k-Nearest Neighbor (kNN)</li>
+  <li>Random Forest</li>
+  <li>Naive Bayes</li>
+</ol>
+
+<p>나중에 위의 모델에 대한 자세한 설명을 포스팅 할 텐데, 일단 이런 예측 모델이 있다고 하고 넘어가자.</p>
+
+<p>일단 위 모델을 사용하기 위해서 필요한 <code class="language-plaintext highlighter-rouge">scikit-learn</code> 라이브러리를 불러오자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">shuffle</span></code></pre></figure>
+
+<p>학습시키기 전에는 주어진 데이터가 정렬되어있어 학습에 방해가 될 수도 있으므로 섞어주도록 하자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span></code></pre></figure>
+
+<p>이제 모델 학습과 평가에 대한 pipeline을 만들자.</p>
+
+<p>사실 <code class="language-plaintext highlighter-rouge">scikit-learn</code>에서 제공하는 <code class="language-plaintext highlighter-rouge">fit()</code>과 <code class="language-plaintext highlighter-rouge">predict()</code>를 사용하면 매우 간단하게 학습과 예측을 할 수 있어서 그냥 하나의 함수만 만들면 편하게 사용가능하다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<span class="err">​</span>    <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+<span class="err">​</span>    <span class="n">accuracy</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">score</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="err">​</span>    <span class="k">print</span><span class="p">(</span><span class="s">"Accuracy : "</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">,</span> <span class="s">"%"</span><span class="p">)</span>
+<span class="err">​</span>    <span class="k">return</span> <span class="n">prediction</span></code></pre></figure>
+
+<p>이 함수에 다섯가지 모델을 넣어주면 학습과 평가가 완료된다.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Logistic Regression
+</span><span class="n">log_pred</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="c1"># SVM
+</span><span class="n">svm_pred</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span><span class="n">SVC</span><span class="p">())</span>
+<span class="c1">#kNN
+</span><span class="n">knn_pred_4</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">4</span><span class="p">))</span>
+<span class="c1"># Random Forest
+</span><span class="n">rf_pred</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="c1"># Navie Bayes
+</span><span class="n">nb_pred</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span><span class="n">GaussianNB</span><span class="p">())</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">82.72</span> <span class="o">%</span>
+<span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">83.5</span> <span class="o">%</span>
+<span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">85.41</span> <span class="o">%</span>
+<span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">88.55</span> <span class="o">%</span>
+<span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">79.8</span> <span class="o">%</span></code></pre></figure>
+
+<hr />
+
+<h2 id="6-마무리">6. 마무리</h2>
+
+<p>위에서 볼 수 있듯 4번째 모델인 Random Forest에서 가장 높은 정확도(88.55%)를 보였는데, 이 모델을 채택해서 submission 해보자.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">submission</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="err">​</span>    <span class="s">"PassengerId"</span><span class="p">:</span> <span class="n">test</span><span class="p">[</span><span class="s">"PassengerId"</span><span class="p">],</span>
+<span class="err">​</span>    <span class="s">"Survived"</span><span class="p">:</span> <span class="n">rf_pred</span>
+<span class="p">})</span>
+
+<span class="n">submission</span><span class="p">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">'submission_rf.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<p>이제 여기서 만든 csv파일을 Kaggle에 업로드시켜 보면 다음과 같은 결과가 나타난다.</p>
+
+<p><img src="/img/posts/titanic/submission.png" alt="My First Submission" class="center-95" /><br />
+<span class="caption">My First Submission</span></p>
+
+<p>코드 상에서 확인한 정확도 보다는 꽤 많이 떨어진 77%가 결과로 나왔는데 Leader Board를 확인해보니 만 명 중에서 5000등 정도 나온다.</p>
+
+<p>첫 번째 캐글 도전 치고 나쁘지 않은 결과가 나온 것 같아서 다행이긴 한데, 포스팅을 하고보니 개선하거나 시도해 볼 만한 부분이 몇 가지가 보인다.</p>
+
+<ul>
+  <li>Data에 있는 Outlier 제거하기</li>
+  <li>데이터 분석을 더 자세하게 하기</li>
+  <li>NaN 값을 다른 방법으로 채워넣기</li>
+  <li>사용하지 않은 Feature(Ticket, Cabin) 활용하기</li>
+  <li>모델 설계, hyperparameter 선택, 평가(Cross Validation)를 직접 구현해서 진행하기</li>
+</ul>
+
+<p>사실 이번에 Kaggle Competition을 진행하는 데에 있어서 데이터 분석에 할애한 시간이 그렇게 많지는 않았던 것 같다.</p>
+
+<p>데이터 시각화나 분석하는 기법들에 대해서 좀 더 알아보고 위와 같은 부분을 개선해서 성능을 올려봐야겠다.</p>
+
+:ET

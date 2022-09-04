@@ -1,0 +1,85 @@
+I"�<h3 id="inception-score-is">Inception Score (IS)</h3>
+
+<ul>
+  <li>
+    <p>IS는 GAN의 성능을 측정하기 위해 다음 두 가지 기준을 고려한다.</p>
+
+    <ol>
+      <li>생성된 이미지의 quality (진짜 같은 이미지가 만들어지는지)</li>
+      <li>diversity (다양한 이미지가 만들어지는지)</li>
+    </ol>
+  </li>
+  <li>
+    <p>엔트로피는 randomness로 볼 수 있는데, 확률 변수 $x$ 가 뻔하게 예측가능하다면 엔트로피가 낮다고 볼 수 있다.</p>
+  </li>
+  <li>
+    <p>GAN에서는 조건부 확률 \(P(y\vert x)\) 가 예측 가능성이 높기를(생성된 이미지의 클래스를 예측하기 쉬워야 함) 원하고 이는 낮은 엔트로피를 가져야 함을 알 수 있다.</p>
+
+    <ul>
+      <li>여기에서 \(x\) 는 생성된 이미지이고 \(y\) 는 label 이다.</li>
+      <li>IS 에서는 생성된 이미지의 클래스를 예측할 때 pre-train된 inception network를 사용함.</li>
+    </ul>
+  </li>
+  <li>
+    <p>한편 \(P(y)\) 는 주변 확률로 다음과 같이 계산 가능하다.</p>
+
+\[\int_zp(y|x=G(z)) dz\]
+
+    <ul>
+      <li>만약 생성된 이미지가 diverse 하다면 \(y\) 는 균등 분포에 가까워야 할 것이며, 이는 높은 엔트로피를 가져야 함을 알 수 있다.</li>
+    </ul>
+  </li>
+  <li>
+    <p>이렇게 살펴본 두 기준을 합쳐보면 KL divergence를 활용한 다음 식을 만들 수 있다.</p>
+  </li>
+</ul>
+
+\[IS(G)=\text{exp} (\mathbb{E}_{\mathbf{x} \sim p_a}D_{KL}(p(y\vert {\mathbf{x}})\Vert p(y)))\]
+
+<ul>
+  <li>IS 가 높을수록 좋은 성능을 낸다고 해석할 수 있다.</li>
+  <li>하지만 IS에는 실제 샘플 대신 생성된 이미지를 사용해 계산하고, 클래스 당 하나의 이미지만 생성하면 다양성이 낮더라도 \(p(y)\) 가 균등 분포에 가깝게 나오기 때문에 성능을 잘못 나타낼 수 있다는 단점이 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="fréchet-inception-distance-fid"><strong>Fr</strong>échet Inception Distance (FID)</h3>
+
+<ul>
+  <li>
+    <p>FID는 Inception network의 중간 레이어에서 feature를 가져와 이를 활용한다.</p>
+  </li>
+  <li>
+    <p>실제 데이터의 분포를 활용하지 않는 단점을 보완해 실제 데이터와 생성된 데이터에서 얻은 feature의 평균과 공분산을 비교하는 식으로 구성된다.</p>
+
+    <ul>
+      <li>실제 데이터와 생성된 데이터의 분포를 가우시안이라고 가정하고, 이 두 분포의 Wasserstein-2 distance(Fréchet distance)를 계산하는 식이다. (<a href="https://www.slideshare.net/ssuser7e10e4/wasserstein-gan-i">여기</a> 참고)</li>
+    </ul>
+
+\[\text{FID}(x,g)=||\mu_x-\mu_g||_2^2+\text{Tr}(\Sigma_x+\Sigma_g-2(\Sigma_x\Sigma_g)^{1 \over 2})\]
+  </li>
+  <li>
+    <p>여기에서 \(\text{Tr}\) 은 대각 성분의 합을 의미한다.</p>
+  </li>
+  <li>
+    <p>또한 실제 데이터의 평균과 공분산은 매번 계산할 필요가 없으므로 따로 저장해서 사용하는 편이다.</p>
+  </li>
+  <li>
+    <p>FID는 낮을수록 좋은 성능을 낸다고 해석할 수 있다.</p>
+  </li>
+  <li>
+    <p>FID는 IS보다 noise에 consist 한데, 해당 <a href="https://arxiv.org/pdf/1706.08500.pdf">논문</a>의 <em>Appendix A1</em>을 참고하자.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="reference">Reference</h4>
+
+<ul>
+  <li><a href="https://medium.com/@jonathan_hui/gan-how-to-measure-gan-performance-64b988c47732">GAN - How to measure GAN performance</a></li>
+  <li><a href="https://arxiv.org/pdf/1606.03498.pdf">Improved Techniques for Training GANs</a></li>
+  <li><a href="https://arxiv.org/pdf/1706.08500.pdf">GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium</a></li>
+</ul>
+
+:ET

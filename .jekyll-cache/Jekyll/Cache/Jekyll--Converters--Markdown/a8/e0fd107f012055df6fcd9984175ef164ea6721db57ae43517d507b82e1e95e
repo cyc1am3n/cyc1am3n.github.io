@@ -1,0 +1,357 @@
+I"�o<p>Coursera 강의 “Machine Learning with TensorFlow on Google Cloud Platform” 중 다섯 번째 코스인 <a href="https://www.coursera.org/learn/art-science-ml/home/welcome">Art and Science of Machine Learning</a>의 강의노트입니다.</p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="review-embedding">Review Embedding</h2>
+
+<hr />
+
+<ul>
+  <li>Creating an embedding column from a <code class="language-plaintext highlighter-rouge">feature cross</code>.</li>
+  <li>The weights in the embedding column are <code class="language-plaintext highlighter-rouge">learned from data</code>.</li>
+  <li>The model learns how to embed the feature cross in lower-dimensional space</li>
+  <li>Embedding a feature cross in TensorFlow</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="kn">import</span> <span class="nn">tf.feature_column</span> <span class="k">as</span> <span class="n">fc</span>
+
+<span class="n">day_hr</span> <span class="o">=</span> <span class="n">fc</span><span class="p">.</span><span class="n">crossed_column</span><span class="p">([</span><span class="n">dayofweek</span><span class="p">,</span> <span class="n">hourofday</span><span class="p">],</span> <span class="mi">24</span><span class="o">*</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># Transfer Learning of embedding from similar ML models
+</span><span class="n">day_hr_em</span> <span class="o">=</span> <span class="n">fc</span><span class="p">.</span><span class="n">embedding_column</span><span class="p">(</span><span class="n">day_hr</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">ckpt_to_load_from</span><span class="o">=</span><span class="s">'london/*ckpt-1000*'</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">tensor_name_in_ckpt</span><span class="o">=</span><span class="s">'dayhr_embed'</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">trainable</span><span class="o">=</span><span class="bp">False</span>
+<span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>Transfer Learning of embeddings from similar ML models
+    <ul>
+      <li>First layer: the feature cross</li>
+      <li>Second layer: a mystery box labeled latent factor</li>
+      <li>Third layer: the embedding</li>
+      <li>Fourth layer: one side: image of traffic</li>
+      <li>Second side: image of people watching TV</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="recommendations">Recommendations</h2>
+
+<hr />
+
+<ul>
+  <li>Using a <code class="language-plaintext highlighter-rouge">second dimension</code> gives us more freedom in organizing movies by similarity</li>
+  <li>A <code class="language-plaintext highlighter-rouge">d-dimensional</code> embedding assumes that user interest in movies can be approximated by d aspects (d &lt; N)</li>
+</ul>
+
+<p><img src="/img/posts/art-and-science-of-ml/14.png" alt="" class="center-75" /><br />
+<span class="caption"></span></p>
+
+<p><br /></p>
+
+<h2 id="data-driven-embeddings">Data-driven Embeddings</h2>
+
+<hr />
+
+<ul>
+  <li>We could give the axes names, but it is not essential</li>
+  <li>Its’ easier to train a model with d inputs than a model with N inputs</li>
+  <li>Embeddings can be learned from data</li>
+</ul>
+
+<p><img src="/img/posts/art-and-science-of-ml/15.png" alt="" class="center-75" /><br />
+<span class="caption"></span></p>
+
+<p><br /></p>
+
+<h2 id="sparse-tensors">Sparse Tensors</h2>
+
+<hr />
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Dense</code> representations are inefficient in space and compute</p>
+  </li>
+  <li>
+    <p>So, use a <code class="language-plaintext highlighter-rouge">sparse representation</code> to hold the example</p>
+
+    <ul>
+      <li>Build a dictionary mapping each feature to an integer from 0, … # movies -1</li>
+      <li>Efficiently represent the sparse vector as just the movies the user watched</li>
+    </ul>
+  </li>
+  <li>
+    <p>Representing feature columns as sparse vectors (These are all different ways to create a categorical column)</p>
+
+    <ul>
+      <li>If you <code class="language-plaintext highlighter-rouge">know the keys</code> beforehand:</li>
+    </ul>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="n">tf</span><span class="p">.</span><span class="n">feature_column</span><span class="p">.</span><span class="n">categorical_column_with_vocabulary_list</span><span class="p">(</span><span class="s">'employeeId'</span><span class="p">,</span>
+  <span class="err">​</span>	<span class="n">vocabulary_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">'8345'</span><span class="p">,</span> <span class="s">'72345'</span><span class="p">,</span> <span class="s">'87654'</span><span class="p">,</span> <span class="s">'98723'</span><span class="p">,</span> <span class="s">'23451'</span><span class="p">])</span>
+  </code></pre></figure>
+
+<ul>
+  <li>If your data is <code class="language-plaintext highlighter-rouge">already indexed</code>: i.e., has integers in[0-N):</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="n">tf</span><span class="p">.</span><span class="n">feature_column</span><span class="p">.</span><span class="n">categorical_column_with_identity</span><span class="p">(</span><span class="s">'employeeId'</span><span class="p">,</span>
+  <span class="err">​</span>	<span class="n">num_bucket</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+  </code></pre></figure>
+
+<ul>
+  <li>If you don’t have a vocabulary of all possible values:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="n">tf</span><span class="p">.</span><span class="n">feature_column</span><span class="p">.</span><span class="n">categorical_column_with_hash_bucket</span><span class="p">(</span><span class="s">'employeeId'</span><span class="p">,</span>
+<span class="err">​</span>	<span class="n">hash_bucket_size</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span></code></pre></figure>
+
+<p><br /></p>
+
+<h2 id="train-an-embedding">Train an Embedding</h2>
+
+<hr />
+
+<ul>
+  <li>Embedding are feature columns that function like layers</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="n">sparse_word</span> <span class="o">=</span> <span class="n">fc</span><span class="p">.</span><span class="n">categorical_column_with_vocabulary_list</span><span class="p">(</span><span class="s">'word'</span><span class="p">,</span>
+<span class="err">​</span>	<span class="n">vocabulary_list</span><span class="o">=</span><span class="n">englishWords</span><span class="p">)</span>
+<span class="n">embedded_word</span> <span class="o">=</span> <span class="n">fc</span><span class="p">.</span><span class="n">embedding_column</span><span class="p">(</span><span class="n">sparse_word</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>The weights in the embedding layer are learned through <code class="language-plaintext highlighter-rouge">backprop</code> just as with other weights</li>
+  <li>Embeddings can be thought of as <code class="language-plaintext highlighter-rouge">latent features</code>.</li>
+</ul>
+
+<p><img src="/img/posts/art-and-science-of-ml/16.png" alt="" class="center-75" /><br />
+<span class="caption"></span></p>
+
+<p><br /></p>
+
+<h2 id="similarity-property">Similarity Property</h2>
+
+<hr />
+
+<ul>
+  <li>Embeddings provides <code class="language-plaintext highlighter-rouge">dimensionality reduction</code>.</li>
+</ul>
+
+<p><img src="/img/posts/art-and-science-of-ml/17.png" alt="" class="center-75" /><br />
+<span class="caption"></span></p>
+
+<ul>
+  <li>
+    <p>You can take advantage of this similarity property of embeddings</p>
+  </li>
+  <li>
+    <p>A good starting point for number of embedding dimensions</p>
+
+    <ul>
+      <li>Higher dimensions → <code class="language-plaintext highlighter-rouge">more accuracy</code></li>
+      <li>Higher dimensions → <code class="language-plaintext highlighter-rouge">overfitting</code>, <code class="language-plaintext highlighter-rouge">slow training</code></li>
+      <li>Empirical tradeoff</li>
+    </ul>
+
+\[dimensions\approx\sqrt[4]{possible\ values}\]
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="custom-estimator">Custom Estimator</h2>
+
+<hr />
+
+<ul>
+  <li>Estimator provides a lot of benefits</li>
+  <li>Canned Estimators are sometimes insufficient</li>
+</ul>
+
+<p><img src="/img/posts/art-and-science-of-ml/18.png" alt="" class="center-75" /><br />
+<span class="caption"></span></p>
+
+<ul>
+  <li>
+    <p>Suppose that you want to use a model structure from a research paper…</p>
+
+    <ul>
+      <li>Implement the model using low-level TensorFlow ops</li>
+    </ul>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="k">def</span> <span class="nf">model_from_research_paper</span><span class="p">(</span><span class="n">timeseries</span><span class="p">):</span>
+  <span class="err">​</span>	<span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="n">timeseries</span><span class="p">,</span> <span class="n">N_INPUTS</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+  <span class="err">​</span>	<span class="n">lstm_cell</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">.</span><span class="n">BasicLSTMCell</span><span class="p">(</span><span class="n">LSTM_SIZE</span><span class="p">,</span> <span class="n">forget_bias</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+  <span class="err">​</span>	<span class="n">outputs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">.</span><span class="n">static_rnn</span><span class="p">(</span><span class="n">lstm_cell</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="err">​</span>	<span class="n">outputs</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="err">​</span>	<span class="n">weights</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">random_normal</span><span class="p">([</span><span class="n">LSTM_SIZE</span><span class="p">,</span> <span class="n">N_OUTPUTS</span><span class="p">]))</span>
+  <span class="err">​</span>	<span class="n">bias</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">random_normal</span><span class="p">[</span><span class="n">N_OUTPUTS</span><span class="p">]))</span>
+  <span class="err">​</span>	<span class="n">predictions</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias</span>
+  <span class="err">​</span>	<span class="k">return</span> <span class="n">predictions</span>
+  </code></pre></figure>
+
+<ul>
+  <li>
+    <p>How do we wrap this custom model into Estimator framework?</p>
+  </li>
+  <li>
+    <p>Create <code class="language-plaintext highlighter-rouge">train_and_evaluate function</code> with the base-class Estimator</p>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="k">def</span> <span class="nf">train_and_evaluate</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="p">...):</span>
+<span class="err">​</span>	<span class="n">estimator</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">estimators</span><span class="p">.</span><span class="n">Estimator</span><span class="p">(</span><span class="n">model_fn</span> <span class="o">=</span> <span class="n">myfunc</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">model_dir</span> <span class="o">=</span> <span class="n">output_dir</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">train_spec</span> <span class="o">=</span> <span class="n">get_train</span><span class="p">()</span>
+<span class="err">​</span>	<span class="n">exporter</span> <span class="o">=</span> <span class="p">...</span>
+<span class="err">​</span>	<span class="n">eval_spec</span> <span class="o">=</span> <span class="n">get_valid</span><span class="p">()</span>
+<span class="err">​</span>	<span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">train_and_evaluate</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">train_spec</span><span class="p">,</span> <span class="n">eval_spec</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>
+    <p>myfunc (above) is a <code class="language-plaintext highlighter-rouge">EstimatorSpec</code>.</p>
+
+    <ul>
+      <li>The 6 things in a EstimatorSpec</li>
+    </ul>
+
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">Mode</code> is pass-through</li>
+      <li>Any tensors you want to return</li>
+      <li><code class="language-plaintext highlighter-rouge">Loss</code> metric</li>
+      <li><code class="language-plaintext highlighter-rouge">Training</code> op</li>
+      <li><code class="language-plaintext highlighter-rouge">Eval</code> ops</li>
+      <li>Export outputs</li>
+    </ol>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+  	<span class="c1"># Code up the model
+</span>  <span class="err">​</span>	<span class="n">predictions</span> <span class="o">=</span> <span class="n">model_from_research_paper</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">INCOL</span><span class="p">})</span>
+
+  <span class="c1"># Set up loss function, training/eval ops
+</span>  <span class="p">...</span> <span class="c1"># (next code)
+</span>
+  <span class="c1"># Create export outputs
+</span>  <span class="n">export_outputs</span> <span class="o">=</span> <span class="p">{</span><span class="s">"regression_export_outputs"</span><span class="p">:</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">export</span><span class="p">.</span><span class="n">RegressionOutput</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">)}</span>
+  <span class="c1"># Return EstimatorSpec
+</span>  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">EstimatorSpec</span><span class="p">(</span>
+  <span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span><span class="p">,</span>
+  <span class="n">predictions</span> <span class="o">=</span> <span class="n">predictions_dict</span><span class="p">,</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span><span class="p">,</span>
+  <span class="n">train_op</span> <span class="o">=</span> <span class="n">train_op</span><span class="p">,</span>
+  <span class="n">eval_metric_ops</span> <span class="o">=</span> <span class="n">eval_metric_ops</span><span class="p">,</span>
+  <span class="n">export_outputs</span> <span class="o">=</span> <span class="n">export_outputs</span><span class="p">)</span>
+
+  </code></pre></figure>
+
+<ul>
+  <li>The ops are set up in the appropriate mode</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">ModeKeys</span><span class="p">.</span><span class="n">TRAIN</span> <span class="ow">or</span>
+<span class="err">​</span>	<span class="n">mode</span> <span class="o">==</span> <span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">ModeKeys</span><span class="p">.</span><span class="n">EVAL</span><span class="p">:</span>
+<span class="err">​</span>	<span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">train_op</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">contrib</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">optimize_loss</span><span class="p">(</span>
+<span class="err">​</span>		<span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">global_step</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">contrib</span><span class="p">.</span><span class="n">framework</span><span class="p">.</span><span class="n">get_global_step</span><span class="p">(),</span>
+<span class="err">​</span>		<span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">optimizer</span><span class="o">=</span><span class="s">"SGD"</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">eval_metric_ops</span> <span class="o">=</span> <span class="p">{</span>
+<span class="err">​</span>		<span class="s">"rmse"</span> <span class="p">:</span> <span class="n">tf</span><span class="p">.</span><span class="n">metrics</span><span class="p">.</span><span class="n">root_mean_squared_error</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)}</span>
+<span class="k">else</span><span class="p">:</span>
+<span class="err">​</span>	<span class="n">loss</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="err">​</span>	<span class="n">train_op</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="err">​</span>	<span class="n">eval_metric_ops</span> <span class="o">=</span> <span class="bp">None</span></code></pre></figure>
+
+<p><br /></p>
+
+<h2 id="keras-models">Keras Models</h2>
+
+<hr />
+
+<ul>
+  <li>Keras is high-level deep neural networks library that supports multiple backends</li>
+  <li>Keras is easy to use for fast prototyping</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Embedding</span><span class="p">(</span><span class="n">max_features</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="mi">256</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'sigmoid'</span><span class="p">))</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'binary_crossentropy'</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">optimizer</span><span class="o">=</span><span class="s">'rmsprop'</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+
+<span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>From a compiled Keras model, you can get an Estimator</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Embedding</span><span class="p">(</span><span class="n">max_features</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="mi">256</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'sigmoid'</span><span class="p">))</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'binary_crossentropy'</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">optimizer</span><span class="o">=</span><span class="s">'rmsprop'</span><span class="p">,</span>
+<span class="err">​</span>		<span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+
+<span class="c1"># Get estimator from keras
+</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">model_to_estimator</span><span class="p">(</span><span class="n">keras_model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>You will use this estimator the way you normally use an estimator</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="k">def</span> <span class="nf">train_and_evaluate</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+<span class="err">​</span>	<span class="n">estimator</span> <span class="o">=</span> <span class="n">make_keras_estimator</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">train_spec</span> <span class="o">=</span> <span class="n">tflestimator</span><span class="p">.</span><span class="n">TrainSpec</span><span class="p">(</span><span class="n">train_fn</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">exporter</span> <span class="o">=</span> <span class="n">LatestExporter</span><span class="p">(</span><span class="s">'exporter'</span><span class="p">,</span> <span class="n">serving_input_fn</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">eval_spec</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">EvalSpec</span><span class="p">(</span><span class="n">eval_fn</span><span class="p">,</span>
+<span class="err">​</span>				<span class="n">steps</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="err">​</span>				<span class="n">exporters</span> <span class="o">=</span> <span class="n">exporter</span><span class="p">)</span>
+<span class="err">​</span>	<span class="n">tf</span><span class="p">.</span><span class="n">estimator</span><span class="p">.</span><span class="n">train_and_evaluate</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">train_spec</span><span class="p">,</span> <span class="n">eval_spec</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>The connection between the input features and Keras is through a naming convention</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> 
+<span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(...,</span> <span class="n">name</span><span class="s">'XYZ'</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">train_input_fn</span><span class="p">():</span>
+<span class="err">​</span>	<span class="p">...</span>
+<span class="err">​</span>	<span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+<span class="err">​</span>				<span class="s">'XYZ_input'</span><span class="p">:</span> <span class="n">some_tensor</span><span class="p">,</span>
+<span class="err">​</span>			<span class="p">}</span>
+<span class="err">​</span>	<span class="k">return</span> <span class="n">features</span><span class="p">,</span> <span class="n">labels</span></code></pre></figure>
+:ET

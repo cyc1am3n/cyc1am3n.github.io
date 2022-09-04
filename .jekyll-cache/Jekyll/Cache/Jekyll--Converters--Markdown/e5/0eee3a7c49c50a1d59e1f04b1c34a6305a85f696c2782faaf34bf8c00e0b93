@@ -1,0 +1,16 @@
+I"�<p>머신러닝 모델의 타당성을 검증하는 방법 중의 하나로 <code class="language-plaintext highlighter-rouge">"크로스 밸리데이션(Cross-validation)"</code>이란게 있습니다. 한국어로는 “교차 검증”이라고 부릅니다.</p>
+
+<p>크로스 밸리데이션이란 특정 데이터를 훈련 전용 데터와 테스트 전용 데이터로 분할한 뒤 훈련 데이터를 활용해 학습하고, 테스트 데이터로 테스트해서 학습의 타당성을 검증하는 방법입니다.</p>
+
+<p>크로스 밸리데이션에는 여러 가지 방법이 있는데, K 분할 교차 검증은 다음과 같이 합니다.</p>
+
+<p>예로 집합 X를 3개로 분할해 A/B/C로 만드는 경우를 생각해봅시다.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="err">집합</span> <span class="no">X</span><span class="err">를</span> <span class="no">A</span><span class="p">,</span> <span class="no">B</span><span class="p">,</span> <span class="no">C</span><span class="err">로</span> <span class="err">분할합니다</span><span class="p">.</span>  
+<span class="nf">[</span><span class="mi">2</span><span class="p">]</span> <span class="no">A</span><span class="err">를</span> <span class="err">테스트</span> <span class="err">전용</span> <span class="err">데이터</span><span class="p">,</span> <span class="err">나머지</span> <span class="no">B</span><span class="o">/</span><span class="no">C</span><span class="err">를</span> <span class="err">훈련</span> <span class="err">전용</span> <span class="err">데이터로</span> <span class="err">사용해</span> <span class="err">분류</span> <span class="err">정밀도</span> <span class="n">s1</span><span class="err">을</span> <span class="err">구합니다</span><span class="p">.</span>  
+<span class="nf">[</span><span class="mi">3</span><span class="p">]</span> <span class="no">B</span><span class="err">를</span> <span class="err">테스트</span> <span class="err">전용</span> <span class="err">데이터</span><span class="p">,</span> <span class="err">나머지</span> <span class="no">A</span><span class="o">/</span><span class="no">C</span><span class="err">를</span> <span class="err">훈련</span> <span class="err">전용</span> <span class="err">데이터로</span> <span class="err">사용해</span> <span class="err">분류</span> <span class="err">정밀도</span> <span class="n">s2</span><span class="err">을</span> <span class="err">구합니다</span><span class="p">.</span>  
+<span class="nf">[</span><span class="mi">4</span><span class="p">]</span> <span class="no">C</span><span class="err">를</span> <span class="err">테스트</span> <span class="err">전용</span> <span class="err">데이터</span><span class="p">,</span> <span class="err">나머지</span> <span class="no">A</span><span class="o">/</span><span class="no">B</span><span class="err">를</span> <span class="err">훈련</span> <span class="err">전용</span> <span class="err">데이터로</span> <span class="err">사용해</span> <span class="err">분류</span> <span class="err">정밀도</span> <span class="n">s3</span><span class="err">을</span> <span class="err">구합니다</span><span class="p">.</span>  
+<span class="nf">[</span><span class="mi">5</span><span class="p">]</span> <span class="err">분류</span> <span class="err">정밀도</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="err">의</span> <span class="err">평균을</span> <span class="err">구해</span> <span class="err">최종적인</span> <span class="err">분류</span> <span class="err">정밀도를</span> <span class="err">구합니다</span><span class="o">.</span> </code></pre></figure>
+
+<p>위의 예처럼 3개로 분할하는 방법을 3-fold cross validation이라고 부릅니다.</p>
+:ET
