@@ -27,6 +27,6 @@ for script in "/tmp/publish.d/*"; do
 done
 git add .
 git commit -m "publish commit ${commit_hash}"
-git push
+git push origin gh-pages
 rm -r _site/
 git checkout ${branch}
