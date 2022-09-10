@@ -20,7 +20,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
 
 ------
 
-{% include image.html file="/img/posts/art-and-science-of-ml/01.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/01.png" class="center-75"%}
 
 - The `simpler` the better
 
@@ -48,7 +48,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
 
 - How can we measure model complexity?
 
-{% include image.html file="/img/posts/art-and-science-of-ml/02.png" description="L2 vs. L1 Norm" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/02.png" description="L2 vs. L1 Norm" class="center-75"%}
 
 - In `L2` regularization, `complexity` of model is defined by the L2 norm of the weight vector
 
@@ -126,7 +126,7 @@ model.train(input_fn=train_fn, steps=10000)
   - `Hyper-parameters` set before training
 - Model improvement is very sensitive to batch_size and learning_rate
 
-{% include image.html file="/img/posts/art-and-science-of-ml/03.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/03.png" class="center-75"%}
 
 - There are a variety of model parameters too 
   - Size of model
@@ -162,7 +162,7 @@ model.train(input_fn=train_fn, steps=10000)
 
 - There are many possible choices of norms
 
-{% include image.html file="/img/posts/art-and-science-of-ml/04.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/04.png" class="center-75"%}
 
 - `Elastic nets` combine the feature selection of L1 regularization with the generalizability of L2 regularization
 
@@ -176,7 +176,7 @@ model.train(input_fn=train_fn, steps=10000)
 
 - Transform linear regression by a sigmoid activation function
 
-{% include image.html file="/img/posts/art-and-science-of-ml/05.png" description="Logistic Regression" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/05.png" description="Logistic Regression" class="center-75"%}
 
 - The output of Logistic Regression is a calibrated probability estimate
 
@@ -195,13 +195,13 @@ model.train(input_fn=train_fn, steps=10000)
 
 - Often we do both `regularization` and `early stopping` to counteract overfitting
 
-{% include image.html file="/img/posts/art-and-science-of-ml/06.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/06.png" class="center-75"%}
 
 - In many real-world problems, the probability is not enough; we need to make a `binary decision`
   - Choice of `threshold` is important and can be tuned
 - Use the `ROC curve` to choose the decision threshold based on decision criteria
 
-{% include image.html file="/img/posts/art-and-science-of-ml/07.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/07.png" class="center-75"%}
 
 - The `Area-Under-Curve(AUC)` provides an aggregate measure of performance across all possible classification thresholds 
   - AUC helps you choose between models when you don't know what decision threshold is going to be ultimately used.
@@ -211,7 +211,7 @@ model.train(input_fn=train_fn, steps=10000)
   - Look for bias in slices of data. this can guide improvements
 - Use calibration plots of bucketed bias to find slices where your model performs poorly
 
-{% include image.html file="/img/posts/art-and-science-of-ml/08.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/08.png" class="center-75"%}
 
 <br />
 
@@ -227,9 +227,9 @@ model.train(input_fn=train_fn, steps=10000)
 - A Linear Model can be represented as nodes and edges
 - Adding a Non-Linearity
 
-{% include image.html file="/img/posts/art-and-science-of-ml/09.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/09.png" class="center-75"%}
 
-{% include image.html file="/img/posts/art-and-science-of-ml/10.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/10.png" class="center-75"%}
 
 - Our favorite non-linearity is the `Rectified Linear Unit` (ReLU)
 
@@ -280,7 +280,7 @@ model.train(input_fn=train_input_fn, steps=NSTEPS)
 - Optionally, can also regularize using `dropout`
 - Three common failure modes for gradient descent
 
-{% include image.html file="/img/posts/art-and-science-of-ml/11.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/11.png" class="center-75"%}
 
 - There are benefits if feature values are `small` numbers 
   - Roughly zero-centered, [-1, 1] range often works well
@@ -292,7 +292,7 @@ model.train(input_fn=train_input_fn, steps=NSTEPS)
   - Log scaling
 - `Dropout` layers are a form of regularization
 
-{% include image.html file="/img/posts/art-and-science-of-ml/12.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/12.png" class="center-75"%}
 
 - Dropout simulates `ensemble` learning
 - Typical values for dropout are between `20 to 50` percent
@@ -314,7 +314,7 @@ model.train(input_fn=train_input_fn, steps=NSTEPS)
 - Idea: Use separate output nodes for each possible class
 - Add additional constraint, that total outputs = 1.0
 
-{% include image.html file="/img/posts/art-and-science-of-ml/13.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/13.png" class="center-75"%}
 
 - Use one `softmax` loss for all possible classes
 

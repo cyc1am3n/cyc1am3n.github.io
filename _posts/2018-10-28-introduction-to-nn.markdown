@@ -22,7 +22,7 @@ comments: true
 
 $$ f(x,y,z)=(x+y)z $$
 
-{% include image.html file="/img/posts/cs231n/lec04-01.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/cs231n/lec04-01.png" class="center-75"%}
 
 우리가 구하고 싶은 것은 각 input에 대한 f의 gradient이다.(경사 하강법을 적용해야하기 때문에) 이는 최종 출력 노드에서 얻을 수 있는 gradient로 부터 하나씩 거꾸로 거슬러 올라가면서 얻을 수 있을 것이다.
 
@@ -85,7 +85,7 @@ $$
 
 또한 아래와 같이 하나의 노드가 2개 이상의 branch를 가질 때는 각 branch에서 얻어지는 gradient를 더해야 한다.
 
-{% include image.html file="/img/posts/cs231n/lec04-02.png" class="center-95"%}
+{% include image.html file="/assets/img/posts/cs231n/lec04-02.png" class="center-95"%}
 
 
 
@@ -95,7 +95,7 @@ $$
 
 아래 예제를 통해서 생각해보자.
 
-{% include image.html file="/img/posts/cs231n/lec04-03.png" class="center-95"%}
+{% include image.html file="/assets/img/posts/cs231n/lec04-03.png" class="center-95"%}
 
 여기서의 입력은 4096 차원의 벡터이고, 이는 CNN에서 흔하게 볼 수 있는 입력 사이즈이다.
 
@@ -151,7 +151,7 @@ class ComputationalGraph(object):
 
 $$ f=W_2max(0,W_1x) $$
 
-{% include image.html file="/img/posts/cs231n/lec04-04.png" class="center-95"%}
+{% include image.html file="/assets/img/posts/cs231n/lec04-04.png" class="center-95"%}
 
 위 신경망은 첫 번째로 $$W_1$$과 $$x$$의 행렬 곱을 중간 변수로 가지고 $$max(0, W)$$ 라는 **비선형 함수**를 이용해서 선형 값을 얻는다.
 
@@ -173,7 +173,7 @@ $$ f=W_2max(0,W_1x) $$
 
 지금까지 해왔던 것을 살펴본다면, 각 computational node와 뉴런의 동작이 다음과 같이 비슷한 방식으로 이루어 진다는 것을 알 수 있다.
 
-{% include image.html file="/img/posts/cs231n/lec04-05.png" class="center-95"%}
+{% include image.html file="/assets/img/posts/cs231n/lec04-05.png" class="center-95"%}
 
 또한 왼쪽 하단과 같이 활성 함수(activation function)을 볼 수 있는데, 이것은 입력을 받아 나중에 출력이 될 하나의 숫자를 보여주는 것이다.
 
@@ -181,7 +181,7 @@ $$ f=W_2max(0,W_1x) $$
 
 마지막으로 신경망의 feed-forward 계산의 예를 살펴보고 마무리를 하면 될 것 같다.
 
-{% include image.html file="/img/posts/cs231n/lec04-06.png" class="center-95"%}
+{% include image.html file="/assets/img/posts/cs231n/lec04-06.png" class="center-95"%}
 
 여기서 가지고 있는 벡터 행렬의 출력은 비선형성을 가진다.
 

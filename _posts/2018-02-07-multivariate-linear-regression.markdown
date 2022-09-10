@@ -4,7 +4,7 @@ title:  "[Machine Learning] Multivariate Linear Regression"
 subtitle: "「 Machine Learning 」 lecture summary #4"
 date:   2018-02-09 15:01:54 +0900
 tags: [machine-learning, coursera]
-background: '/img/posts/machine-learning.png'
+background: '/assets/img/posts/machine-learning.png'
 author: cyc1am3n
 comments: true
 ---
@@ -21,13 +21,13 @@ Data set의 feature가 여러 개인 경우의 Linear Regression을 `Multivariat
 h(x)는 다음과 같다.
 
 {: refdef: style="text-align: center;"}  
-![그림1](/img/posts/multivariate-linear-regression/multivariate-linear-regression-1.png){: width="75%" height="75%"}
+![그림1](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-1.png){: width="75%" height="75%"}
 {: refdef}
 
 feature가 n개 이지만 vectorization을 위해 θ<sub>0</sub> = θ<sub>0</sub>x<sub>0</sub>, 즉 x<sub>0</sub> = 1 이라 하면 h(x)는 이렇게도 표현이 가능하다.  
 
 {: refdef: style="text-align: center;"}  
-![그림2](/img/posts/multivariate-linear-regression/multivariate-linear-regression-2.png){: width="75%" height="75%"}
+![그림2](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-2.png){: width="75%" height="75%"}
 {: refdef}
 
 이제 행렬 연산으로 h(x)를 간편하게 계산할 수 있게 되었다.  
@@ -37,13 +37,13 @@ feature가 n개 이지만 vectorization을 위해 θ<sub>0</sub> = θ<sub>0</sub
 multiple variables 일때도 gradient descent 방정식은 형태가 같다.  
 
 {: refdef: style="text-align: center;"}  
-![그림3](/img/posts/multivariate-linear-regression/multivariate-linear-regression-3.png){: width="65%" height="65%"}
+![그림3](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-3.png){: width="65%" height="65%"}
 {: refdef}
 
 즉,
 
 {: refdef: style="text-align: center;"}  
-![그림4](/img/posts/multivariate-linear-regression/multivariate-linear-regression-4.png){: width="75%" height="75%"}
+![그림4](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-4.png){: width="75%" height="75%"}
 {: refdef}
 
 이다.  
@@ -51,7 +51,7 @@ multiple variables 일때도 gradient descent 방정식은 형태가 같다.
 다음은 feature 가 1개 일 때와 여러 개 일때 gradient descent algorithm을 비교한 것이다.  
 
 {: refdef: style="text-align: center;"}  
-![그림5](/img/posts/multivariate-linear-regression/multivariate-linear-regression-5.png){: width="75%" height="75%"}
+![그림5](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-5.png){: width="75%" height="75%"}
 {: refdef}
 
 ## Feature Scaling
@@ -67,7 +67,7 @@ input value가 고르지 못할 때, 작은 범위에서는 θ가 천천히 변�
 보통은 다음과 같이 정규화시킨다.  
 
 {: refdef: style="text-align: center;"}  
-![그림6](/img/posts/multivariate-linear-regression/multivariate-linear-regression-6.png){: width="25%" height="25%"}
+![그림6](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-6.png){: width="25%" height="25%"}
 {: refdef}
 
 여기서 μ<sub>i</sub>은 해당 i번째 feature의 평균값이고, s<sub>i</sub>는 해당 i번째 feature 중에서 최대값과 최소값을 뺀 만큼의 값이다.  
@@ -75,7 +75,7 @@ input value가 고르지 못할 때, 작은 범위에서는 θ가 천천히 변�
 예를 들어서 price라는 feature가 100~2000 사이의 값을 가지고 있고 평균값이 1000이라면,  
 
 {: refdef: style="text-align: center;"}  
-![그림7](/img/posts/multivariate-linear-regression/multivariate-linear-regression-7.png){: width="25%" height="25%"}
+![그림7](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-7.png){: width="25%" height="25%"}
 {: refdef}
 
 이다.  
@@ -91,7 +91,7 @@ gradient descent를 이용해서 θ를 구할 때, Cost function 즉 J(θ)가 �
 J(θ)가 너무 천천히 줄어드는 것 또한 learning rate 설정의 오류이다.  
 
  {: refdef: style="text-align: center;"}  
-![그림8](/img/posts/multivariate-linear-regression/multivariate-linear-regression-8.png){: width="70%" height="70%"}
+![그림8](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-8.png){: width="70%" height="70%"}
 {: refdef}
 
 요약하자면,  
@@ -108,7 +108,7 @@ J(θ)가 너무 천천히 줄어드는 것 또한 learning rate 설정의 오류
 또한 Data set의 분포를 보고 그에 적합한 hypothsis function을 설정할 수 있는데, linear 뿐만 아니라 quadratic, cubic 또는 square root의 hypothesis function도 가능하다.  
 
 {: refdef: style="text-align: center;"}  
-![그림9](/img/posts/multivariate-linear-regression/multivariate-linear-regression-9.png){: width="70%" height="70%"}
+![그림9](/assets/img/posts/multivariate-linear-regression/multivariate-linear-regression-9.png){: width="70%" height="70%"}
 {: refdef}
 
 위의 그래프에서 size라는 feature를 가지고 hypothesis function을 설정하면 cubic한 다항식이 될 것이다.  

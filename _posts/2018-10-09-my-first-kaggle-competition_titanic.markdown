@@ -224,7 +224,7 @@ def pie_chart(feature):
 pie_chart('Sex')
 {% endhighlight %}
 
-{% include image.html file="/img/posts/titanic/pie-sex.png" description="Pie Chart for Sex feature." class="center-50"%}
+{% include image.html file="/assets/img/posts/titanic/pie-sex.png" description="Pie Chart for Sex feature." class="center-50"%}
 
 위와 같이 남성이 여성보다 배에 많이 탔으며,  `남성`보다 `여성`의 생존 비율이 높다는 것을 알 수가 있다.
 
@@ -234,7 +234,7 @@ pie_chart('Sex')
 pie_chart('Pclass')
 {% endhighlight %}
 
-{% include image.html file="/img/posts/titanic/pie-pclass.png" description="Pie Chart for Pclass feature." class="center-50"%}
+{% include image.html file="/assets/img/posts/titanic/pie-pclass.png" description="Pie Chart for Pclass feature." class="center-50"%}
 
 위와 같이 Pclass가 3인 사람들의 수가 가장 많았으며,  `Pclass`가 `높을수록`(숫자가 작을수록; 사회경제적 지위가 높을수록) 생존 비율이 높다는 것을 알 수 있다.
 
@@ -244,7 +244,7 @@ pie_chart('Pclass')
 pie_chart('Embarked')
 {% endhighlight %}
 
-{% include image.html file="/img/posts/titanic/pie-embarked.png" description="Pie Chart for Embarked feature." class="center-50"%}
+{% include image.html file="/assets/img/posts/titanic/pie-embarked.png" description="Pie Chart for Embarked feature." class="center-50"%}
 
 위와 같이 `Southampton`에서 선착한 사람이 가장 많았으며, `Cherbourg`에서 탄 사람 중에서는 생존한 사람의 비율이 높았고, 나머지 두 선착장에서 탄 사람들은 생존한 사람보다 그렇지 못한 사람이 조금 더 많았다.
 
@@ -270,7 +270,7 @@ def bar_chart(feature):
 bar_chart("SibSp")
 {% endhighlight %}
 
-{% include image.html file="/img/posts/titanic/bar-sibsp.png" description="Bar Chart for SibSp feature." class="center-95"%}
+{% include image.html file="/assets/img/posts/titanic/bar-sibsp.png" description="Bar Chart for SibSp feature." class="center-95"%}
 
 위와 같이 2명 이상의 형제나 배우자와 함께 배에 탔을 경우 생존한 사람의 비율이 `컸다`는 것을 볼 수 있고, 그렇지 않을 경우에는 생존한 사람의 비율이 `적었다`는 것을 볼 수 있다.
 
@@ -280,7 +280,7 @@ bar_chart("SibSp")
 bar_chart("Parch")
 {% endhighlight %}
 
-{% include image.html file="/img/posts/titanic/bar-parch.png" description="Bar Chart for Parch feature." class="center-95"%} 
+{% include image.html file="/assets/img/posts/titanic/bar-parch.png" description="Bar Chart for Parch feature." class="center-95"%} 
 
 `Parch`특성은 `SibSp`와 비슷하게 2명 이상의 부모나 자식과 함께 배에 탔을 때는 조금 더 생존했지만, 그렇지 않을 경우에는 생존한 사람의 비율이 적었다.
 
@@ -660,7 +660,7 @@ submission.to_csv('submission_rf.csv', index=False)
 
 이제 여기서 만든 csv파일을 Kaggle에 업로드시켜 보면 다음과 같은 결과가 나타난다.
 
-{% include image.html file="/img/posts/titanic/submission.png" description="My First Submission" class="center-95"%} 
+{% include image.html file="/assets/img/posts/titanic/submission.png" description="My First Submission" class="center-95"%} 
 
 코드 상에서 확인한 정확도 보다는 꽤 많이 떨어진 77%가 결과로 나왔는데 Leader Board를 확인해보니 만 명 중에서 5000등 정도 나온다.
 

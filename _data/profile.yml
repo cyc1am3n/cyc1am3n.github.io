@@ -19,7 +19,7 @@ experience: # Remove for hiding the experience section
 interests: # Remove for hiding the interests section
   - Reliability of Machine Learning
   - Natural Language Processing
-  - Healthcare
+  - Machine Learning for Healthcare
 # skills: # Remove for hiding the skills section
 #   - skill: HTML5 & CSS
 #     value: 85  # Percent value
@@ -54,7 +54,7 @@ social:
   youtube:
   facebook:
   instagram:
-  cv: https://kaistackr-my.sharepoint.com/:b:/g/personal/daeyoung_k_kaist_ac_kr/EevUrT777Q9FhdqEwGJ8UnQBLsyFA5aFLDYlfoHHDLerxw?e=aent0z
+  cv: /assets/CV_Daeyoung_Kim.pdf #https://kaistackr-my.sharepoint.com/:b:/g/personal/daeyoung_k_kaist_ac_kr/EevUrT777Q9FhdqEwGJ8UnQBLsyFA5aFLDYlfoHHDLerxw?e=aent0z
 awards: # Remove for hiding the awards section
   - name: Capstone Design at Korea Univ. (3rd Place)
     description: Text Summarization of Biomedical paper related to COVID-19.
@@ -71,5 +71,5 @@ awards: # Remove for hiding the awards section
 
 # Bibliography settings
 scholar:
-  last_name: Kim
+  last_name: [Kim, Kim*]
   first_name: [Daeyoung, Daeyoung*]

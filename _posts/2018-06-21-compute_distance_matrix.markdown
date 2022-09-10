@@ -4,7 +4,7 @@ title:  "Compute Distance with Matrix"
 subtitle: "cs231n assignment1"
 date:   2018-07-06 15:50:54 +0900
 tags: [machine-learning, cs231n]
-background: '/img/posts/machine-learning.png'
+background: '/assets/img/posts/machine-learning.png'
 author: cyc1am3n
 comments: true
 ---
@@ -14,7 +14,7 @@ comments: true
 L2 distance(Euclidean distance)는 유클리드 좌표계에서 두 점 사이의 직선 거리를 의미한다. 유클리드 공간에서 두 점 p = (p<sub>1</sub>, p<sub>2</sub>, ..., p<sub>n</sub>)와 q = (q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>)의 L2 distance는 다음과 같다.  
 
 {: refdef: style="text-align: center;"}  
-![그림1](/img/posts/compute_distance/l2distance.svg){: width="80%" height="80%"} 
+![그림1](/assets/img/posts/compute_distance/l2distance.svg){: width="80%" height="80%"} 
 {: refdef}
 
 ## With Two loops  

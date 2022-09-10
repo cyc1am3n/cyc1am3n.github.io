@@ -54,7 +54,7 @@ day_hr_em = fc.embedding_column(day_hr, 2,
 - Using a `second dimension` gives us more freedom in organizing movies by similarity
 - A `d-dimensional` embedding assumes that user interest in movies can be approximated by d aspects (d < N)
 
-{% include image.html file="/img/posts/art-and-science-of-ml/14.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/14.png" class="center-75"%}
 
 <br />
 
@@ -66,7 +66,7 @@ day_hr_em = fc.embedding_column(day_hr, 2,
 - Its' easier to train a model with d inputs than a model with N inputs
 - Embeddings can be learned from data
 
-{% include image.html file="/img/posts/art-and-science-of-ml/15.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/15.png" class="center-75"%}
 
 <br />
 
@@ -119,7 +119,7 @@ embedded_word = fc.embedding_column(sparse_word, 3)
 - The weights in the embedding layer are learned through `backprop` just as with other weights
 - Embeddings can be thought of as `latent features`.
 
-{% include image.html file="/img/posts/art-and-science-of-ml/16.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/16.png" class="center-75"%}
 
 <br />
 
@@ -129,7 +129,7 @@ embedded_word = fc.embedding_column(sparse_word, 3)
 
 - Embeddings provides `dimensionality reduction`.
 
-{% include image.html file="/img/posts/art-and-science-of-ml/17.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/17.png" class="center-75"%}
 
 - You can take advantage of this similarity property of embeddings
 
@@ -150,7 +150,7 @@ embedded_word = fc.embedding_column(sparse_word, 3)
 - Estimator provides a lot of benefits
 - Canned Estimators are sometimes insufficient
 
-{% include image.html file="/img/posts/art-and-science-of-ml/18.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/art-and-science-of-ml/18.png" class="center-75"%}
 
 - Suppose that you want to use a model structure from a research paper...
 

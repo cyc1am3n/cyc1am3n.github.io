@@ -206,7 +206,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
   - Dataflow
   - Dataflow + TensorFlow (tf.transform)
 
-  {% include image.html file="/img/posts/feature-engineering/01.png" description="Three possible places to do feature engineering" class="center-75"%}
+  {% include image.html file="/assets/img/posts/feature-engineering/01.png" description="Three possible places to do feature engineering" class="center-75"%}
 
 - Some preprocessing can be done in `tf.feature_column`
 
@@ -265,7 +265,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
 
 - Pros and Cons of three ways to do feature engineering
 
-{% include image.html file="/img/posts/feature-engineering/02.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/feature-engineering/02.png" class="center-75"%}
 
 - `tf.transform` is a hybrid of Beam and TensorFlow 
 - `Analyze` \- Beam 

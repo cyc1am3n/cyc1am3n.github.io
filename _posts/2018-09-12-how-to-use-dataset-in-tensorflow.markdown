@@ -105,7 +105,7 @@ with tf.Session() as sess:
 csv파일에서 dataset으로 직접적으로 읽어올 수도 있다. 다음과 같이 트윗(text)과 좋아요(sentiment)가 들어있는 csv파일이 있다고 해보자.  
 
 {: refdef: style="text-align: center;"}  
-![tweets.csv](/img/posts/dataset-in-tensorflow/tweets_csv.png){: width="50%" height="50%"} 
+![tweets.csv](/assets/img/posts/dataset-in-tensorflow/tweets_csv.png){: width="50%" height="50%"} 
 {: refdef}
 
 여기서 `tf.contrib.data.make_csv_dataset`을 사용하면 쉽게 `Dataset`을 만들 수 있다. Iterator는 column의 이름을 key로 하고 row 값을 가진 Tensor를 value로 하는 딕셔너리를 만든다.  

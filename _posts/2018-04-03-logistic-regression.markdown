@@ -5,7 +5,7 @@ subtitle: "「 Machine Learning 」 lecture summary #5"
 date:   2018-04-10 17:30:54 +0900
 categories: computerscience
 tags: [machine-learning]
-background: '/img/posts/machine-learning.png'
+background: '/assets/img/posts/machine-learning.png'
 author: cyc1am3n
 comments: true
 ---
@@ -38,13 +38,13 @@ Classification은 data값을 0과 1사이에 mapping 시켜 이루어진다고 �
 이를 해결하기 위해  `Logistic Function`, 혹은 `Sigmoid Function` 이라는 함수를 이용하는데, 이는 다음과 같다.
 
 {: refdef: style="text-align: center;"}  
-![그림1](/img/posts/logistic-regression/01.png){: width="30%" height="30%"}
+![그림1](/assets/img/posts/logistic-regression/01.png){: width="30%" height="30%"}
 {: refdef}
 
 이러한 sigmoid function의 그래프는 아래와 같다.  
 
 {: refdef: style="text-align: center;"}  
-![그림2](/img/posts/logistic-regression/02.png){: width="70%" height="70%"}
+![그림2](/assets/img/posts/logistic-regression/02.png){: width="70%" height="70%"}
 {: refdef}
 
 이 함수 g(z)는 결과가 1이 나올 확률을 나타낸다.  
@@ -54,7 +54,7 @@ Classification은 data값을 0과 1사이에 mapping 시켜 이루어진다고 �
 또한 결과가 1이 나올 확률과 0이 나올 확률의 합은 항상 1이므로 결과에 따른 확률도 다음과 같이 표현 가능하다.  
 
 {: refdef: style="text-align: center;"}  
-![그림3](/img/posts/logistic-regression/03.png){: width="60%" height="60%"}
+![그림3](/assets/img/posts/logistic-regression/03.png){: width="60%" height="60%"}
 {: refdef}
 
 
@@ -63,13 +63,13 @@ Classification은 data값을 0과 1사이에 mapping 시켜 이루어진다고 �
 위의 과정을 통해 0 또는 1로 classification 하기 위해서, hypothesis function의 결과값을 다음으로 나타낼 수 있다.  
 
 {: refdef: style="text-align: center;"}  
-![그림4](/img/posts/logistic-regression/04.png){: width="100%" height="100%"}
+![그림4](/assets/img/posts/logistic-regression/04.png){: width="100%" height="100%"}
 {: refdef}
 
 logistic function을 생각해보면 결국 다음과 같다는 것도 알 수 있을 것이다.  
 
 {: refdef: style="text-align: center;"}  
-![그림5](/img/posts/logistic-regression/05.png){: width="100%" height="100%"}
+![그림5](/assets/img/posts/logistic-regression/05.png){: width="100%" height="100%"}
 {: refdef}
 
 이렇게 결과 값을 0 또는 1로 구별하는 지점을 `decision boundary`라고 하는데, 다음의 예를 살펴보자.  
@@ -77,7 +77,7 @@ logistic function을 생각해보면 결국 다음과 같다는 것도 알 수 �
 다음과 같은 두 class가 있을때, 이 class를 구분하는 decision boundary를 찾기 위해 hypothesis function h(x) = g(θ<sub>0</sub> + θ<sub>1</sub>x<sub>1</sub> + θ<sub>2</sub>x<sub>2</sub>)를 만들어 보자.  
 
 {: refdef: style="text-align: center;"}  
-![그림6](/img/posts/logistic-regression/06.png){: width="100%" height="100%"}
+![그림6](/assets/img/posts/logistic-regression/06.png){: width="100%" height="100%"}
 {: refdef}
 
 이때 θ = {-3, 1, 1}로 잡으면 x로 표시된 부분은 y = 1이 될 것이고, o로 표시된 부분은 y = 0이 될 것이다.  

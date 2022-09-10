@@ -22,7 +22,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
 
 - `Estimators` wrap up a large amount of boilerplate code, on top of the model itself.
 
-{% include image.html file="/img/posts/intro-to-tensorflow/04.png"  class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/04.png"  class="center-75"%}
 
 - From small to big to prod with the `Estimator API`
   - Quick model
@@ -34,7 +34,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
   - Production: serving predictions from a trained model
 - `Pre-made estimators` that can all be used in the same way.
 
-{% include image.html file="/img/posts/intro-to-tensorflow/05.png" description="tf.estimator.Estimator" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/05.png" description="tf.estimator.Estimator" class="center-75"%}
 
 <br />
 
@@ -169,7 +169,7 @@ model.train(pandas_train_input_fn(df), max_steps=1000)
 
 - Real World ML Models
 
-{% include image.html file="/img/posts/intro-to-tensorflow/06.png" description="Reak World ML Models" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/06.png" description="Reak World ML Models" class="center-75"%}
 
 - Out-of memory datasets tend to be `sharded into multiple files`
 - Datasets can be created from different file formats. They generate `input functions` for Estimators
@@ -220,7 +220,7 @@ dataset = tf.data.TextLineDataset(filename)\
 - `estimator.train_and_evaluate` is the preferred method for training real-world models.
 - **data parallelism** = replicate your model on multiple workers
 
-{% include image.html file="/img/posts/intro-to-tensorflow/07.png" description="Distributed training using dataparallelism" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/07.png" description="Distributed training using dataparallelism" class="center-75"%}
 
 - `estimator.train_and_evaluate` is the preferred method for training real-world models
 
@@ -285,7 +285,7 @@ dataset = dataset.shuffle(1000) \
 - Point Tensorboard to your output directory and the dashboards appear in your browser at localhost:6006
 - `Pre-made` Estimators export relevant metrics, embedding, histograms, etc. for TensorBoard, so there is nothing more to do
 
-{% include image.html file="/img/posts/intro-to-tensorflow/08.png" description="The dashboard for the graph" class="center-50"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/08.png" description="The dashboard for the graph" class="center-50"%}
 
 - If you are writing a custom Estimator model, you can add `summaries` for Tensorboard with a single line.
   - Sprinkle appropriate summary ops throughout your code:
@@ -325,11 +325,11 @@ tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
 
 - `Serving` and `training`-time inputs are often very `different`
 
-{% include image.html file="/img/posts/intro-to-tensorflow/09.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/09.png" class="center-75"%}
 
 - Serving input function transforms from `parsed JSON data` to the `data your model expects`
 
-{% include image.html file="/img/posts/intro-to-tensorflow/10.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/10.png" class="center-75"%}
 
 - The exported model is ready to `deploy`
 - Example serving input function that decodes JPEGs

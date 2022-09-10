@@ -29,7 +29,7 @@ comments: true
 이 데이터셋은 네이버 영화의 리뷰 중 영화당 100개의 리뷰를 모아 총 200,000개의 리뷰(train: 15만, test: 5만)로 이루어져있고,
 1~10점까지의 평점 중에서 중립적인 평점(5~8점)은 제외하고 1~4점을 긍정으로, 9~10점을 부정으로 동일한 비율로 데이터에 포함시켰습니다.
 
-{% include image.html file="/img/posts/ml-with-python/nsmc_dataset.png" class="center-75"%}
+{% include image.html file="/assets/img/posts/ml-with-python/nsmc_dataset.png" class="center-75"%}
 
 데이터는 id, document, label 세 개의 열로 이루어져있습니다.
 id는 리뷰의 고유한 key 값이고, document는 리뷰의 내용, label은 긍정(0)인지 부정(1)인지를 나타냅니다.
@@ -235,7 +235,7 @@ plt.figure(figsize=(20,10))
 text.plot(50)
 ```
 
-{% include image.html file="/img/posts/ml-with-python/nsmc_plot.png" class="center-95"%}
+{% include image.html file="/assets/img/posts/ml-with-python/nsmc_plot.png" class="center-95"%}
 
 이제 자주 사용되는 토큰 10000개를 사용해서 데이터를 벡터화를 시키겠습니다.
 
@@ -278,7 +278,7 @@ IMDB 영화 리뷰 분석에서 사용했던 모델을 조금 변형했습니다
 
 모델의 구조는 다음의 그림과 같습니다.
 
-{% include image.html file="/img/posts/ml-with-python/nsmc_structure.png" class="center-50"%}
+{% include image.html file="/assets/img/posts/ml-with-python/nsmc_structure.png" class="center-50"%}
 
 두 개의 Dense 층은 64개의 유닛을 가지고 활성화 함수로는 relu를 사용했으며, 마지막 층은 sigmoid 활성화 함수를 사용해서 긍정의 리뷰일 확률을 출력합니다.
 

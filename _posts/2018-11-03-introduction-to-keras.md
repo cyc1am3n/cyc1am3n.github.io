@@ -20,7 +20,7 @@ comments: true
 
 ---
 
-{% include image.html file="/img/posts/ml-with-python/01.png" class="center-50"%}
+{% include image.html file="/assets/img/posts/ml-with-python/01.png" class="center-50"%}
 
 케라스는 거의 모든 종류의 딥러닝 모델을 간편하게 만들고 훈련시킬 수 있는 파이썬을 위한 **딥러닝 프레임워크**입니다.
 
@@ -33,7 +33,7 @@ comments: true
 
 한편, 케라스는 딥러닝 모델을 위한 고수준의 구성 요소를 제공하는데, 텐서 조작이나 미분 같은 저수준의 연산은 다루지 않습니다. 대신에 케라스의 **백엔드 엔진** 에서 제공하는 최적화된 텐서 라이브러리를 사용합니다. 케라스는 모듈 구조로 구성되어 있어 하나의 텐서 라이브러리에 국한하여 구현되어 있지 않고, 여러 가지 백엔드 엔진과 매끄럽게 연동됩니다. 현재는 TensorFlow, Theano, CNTK 3개를 백엔드 엔진으로 사용할 수 있습니다.
 
-{% include image.html file="/img/posts/ml-with-python/02.png" description="딥러닝 소프트웨어와 하드웨어 스택" class="center-75"%}
+{% include image.html file="/assets/img/posts/ml-with-python/02.png" description="딥러닝 소프트웨어와 하드웨어 스택" class="center-75"%}
 
 TensorFlow, Theano, CNTK는 딥러닝을 위한 주요 플랫폼 중 하나입니다. 또한 케라스로 작성한 모든 코드는 아무런 변경 없이 이런 백엔드 중 하나를 선택해서 실행시킬 수 있습니다. 개발하는 중간에 하나의 백엔드가 특정 작업에 더 빠르다고 판단되면 언제든지 백엔드를 바꿀 수 있어 아주 유용합니다. 가정 널리 사용되고 확정성이 뛰어나는 텐서플로가 대부분의 딥러닝 작업에 기본으로 권장됩니다.
 

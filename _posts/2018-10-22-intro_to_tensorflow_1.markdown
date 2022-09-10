@@ -45,7 +45,7 @@ Coursera 강의 "Machine Learning with TensorFlow on Google Cloud Platform" 중 
 
 ***
 
-{% include image.html file="/img/posts/intro-to-tensorflow/01.png" description="TensorFlow tolkit hierarchy" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/01.png" description="TensorFlow tolkit hierarchy" class="center-75"%}
 
 - The lowest level is a layer that's implemented to target different hardware platforms.
 - The next level is a TensorFlow C++ API.
@@ -88,7 +88,7 @@ numpy_c = session.run(c, feed_dict=...)
 - The `nodes` represent TensorFlow `operations` on those tensors.
 - `Session` allows  TensorFlow to `cache and distribute` computation.
 
-{% include image.html file="/img/posts/intro-to-tensorflow/02.png" description="Session" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/02.png" description="Session" class="center-75"%}
 
 - Execute TensorFlow graphs by calling `run()` on a `tf.Session`
 
@@ -155,7 +155,7 @@ It's not human-readable.
 
 - A tensor is an N-dimensional array of data.
 
-{% include image.html file="/img/posts/intro-to-tensorflow/03.png" description="what is tensor" class="center-75"%}
+{% include image.html file="/assets/img/posts/intro-to-tensorflow/03.png" description="what is tensor" class="center-75"%}
 
 - Tensors can be `sliced`
 

@@ -172,7 +172,7 @@
 <h4 id="csv파일에서-불러오기">csv파일에서 불러오기</h4>
 <p>csv파일에서 dataset으로 직접적으로 읽어올 수도 있다. 다음과 같이 트윗(text)과 좋아요(sentiment)가 들어있는 csv파일이 있다고 해보자.</p>
 
-<p style="text-align: center;"><img src="/img/posts/dataset-in-tensorflow/tweets_csv.png" alt="tweets.csv" width="50%" height="50%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/dataset-in-tensorflow/tweets_csv.png" alt="tweets.csv" width="50%" height="50%" /></p>
 
 <p>여기서 <code class="language-plaintext highlighter-rouge">tf.contrib.data.make_csv_dataset</code>을 사용하면 쉽게 <code class="language-plaintext highlighter-rouge">Dataset</code>을 만들 수 있다. Iterator는 column의 이름을 key로 하고 row 값을 가진 Tensor를 value로 하는 딕셔너리를 만든다.</p>
 

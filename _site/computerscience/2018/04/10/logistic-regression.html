@@ -121,11 +121,11 @@
 
 <p>이를 해결하기 위해  <code class="language-plaintext highlighter-rouge">Logistic Function</code>, 혹은 <code class="language-plaintext highlighter-rouge">Sigmoid Function</code> 이라는 함수를 이용하는데, 이는 다음과 같다.</p>
 
-<p style="text-align: center;"><img src="/img/posts/logistic-regression/01.png" alt="그림1" width="30%" height="30%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/logistic-regression/01.png" alt="그림1" width="30%" height="30%" /></p>
 
 <p>이러한 sigmoid function의 그래프는 아래와 같다.</p>
 
-<p style="text-align: center;"><img src="/img/posts/logistic-regression/02.png" alt="그림2" width="70%" height="70%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/logistic-regression/02.png" alt="그림2" width="70%" height="70%" /></p>
 
 <p>이 함수 g(z)는 결과가 1이 나올 확률을 나타낸다.</p>
 
@@ -133,23 +133,23 @@
 
 <p>또한 결과가 1이 나올 확률과 0이 나올 확률의 합은 항상 1이므로 결과에 따른 확률도 다음과 같이 표현 가능하다.</p>
 
-<p style="text-align: center;"><img src="/img/posts/logistic-regression/03.png" alt="그림3" width="60%" height="60%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/logistic-regression/03.png" alt="그림3" width="60%" height="60%" /></p>
 
 <h2 id="decison-boundary">Decison Boundary</h2>
 
 <p>위의 과정을 통해 0 또는 1로 classification 하기 위해서, hypothesis function의 결과값을 다음으로 나타낼 수 있다.</p>
 
-<p style="text-align: center;"><img src="/img/posts/logistic-regression/04.png" alt="그림4" width="100%" height="100%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/logistic-regression/04.png" alt="그림4" width="100%" height="100%" /></p>
 
 <p>logistic function을 생각해보면 결국 다음과 같다는 것도 알 수 있을 것이다.</p>
 
-<p style="text-align: center;"><img src="/img/posts/logistic-regression/05.png" alt="그림5" width="100%" height="100%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/logistic-regression/05.png" alt="그림5" width="100%" height="100%" /></p>
 
 <p>이렇게 결과 값을 0 또는 1로 구별하는 지점을 <code class="language-plaintext highlighter-rouge">decision boundary</code>라고 하는데, 다음의 예를 살펴보자.</p>
 
 <p>다음과 같은 두 class가 있을때, 이 class를 구분하는 decision boundary를 찾기 위해 hypothesis function h(x) = g(θ<sub>0</sub> + θ<sub>1</sub>x<sub>1</sub> + θ<sub>2</sub>x<sub>2</sub>)를 만들어 보자.</p>
 
-<p style="text-align: center;"><img src="/img/posts/logistic-regression/06.png" alt="그림6" width="100%" height="100%" /></p>
+<p style="text-align: center;"><img src="/assets/img/posts/logistic-regression/06.png" alt="그림6" width="100%" height="100%" /></p>
 
 <p>이때 θ = {-3, 1, 1}로 잡으면 x로 표시된 부분은 y = 1이 될 것이고, o로 표시된 부분은 y = 0이 될 것이다.</p>
 

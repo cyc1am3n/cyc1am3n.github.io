@@ -4,7 +4,7 @@ title:  "[Machine Learning] Gradient Descent"
 subtitle: "「 Machine Learning 」 lecture summary #3"
 date:   2018-02-06 17:17:54 +0900
 tags: [machine-learning, coursera]
-background: '/img/posts/machine-learning.png'
+background: '/assets/img/posts/machine-learning.png'
 author: cyc1am3n
 comments: true
 ---
@@ -17,7 +17,7 @@ comments: true
 다음은 θ<sub>0</sub>을 x축, θ<sub>1</sub>을 y축, J(θ<sub>0</sub>, θ<sub>1</sub>)을 z축으로 하는 그래프의 예이다.
 
 {: refdef: style="text-align: center;"}  
-![그림1](/img/posts/gradient-descent/gradient-descent-1.png){: width="75%" height="75%"}
+![그림1](/assets/img/posts/gradient-descent/gradient-descent-1.png){: width="75%" height="75%"}
 {: refdef}
 
 이 그래프에서 가장 아래있는 점의 x, y 좌표 즉 θ<sub>0</sub>와, θ<sub>1</sub>을 알아내는 것이 좋은 hypothesis function 만들기의 목표이다.  
@@ -30,14 +30,14 @@ comments: true
 
 learning rate 이야기는 잠시 후에 하고 일단 이렇게 cost function의 최소값을 구하는 gradient descent의 algorithm을 살펴보자.  
 
-![그림2](/img/posts/gradient-descent/gradient-descent-2.png){: width="40%" height="40%"}
+![그림2](/assets/img/posts/gradient-descent/gradient-descent-2.png){: width="40%" height="40%"}
 
 위의 알고리즘은 각 θ에 cost function을 편미분한 값에 α를 곱한만큼 반복해서 뺀다.  
 
 여기서 중요한 부분은 각 θ에 대해 `simultaneous update`를 해줘야한다는 점이다.
 
 {: refdef: style="text-align: center;"}  
-![그림3](/img/posts/gradient-descent/gradient-descent-3.png){: width="80%" height="80%"}
+![그림3](/assets/img/posts/gradient-descent/gradient-descent-3.png){: width="80%" height="80%"}
 {: refdef}
 
 위를 보면 simultaneous update와 그렇지 않은 update의 차이를 알 수 있을 것이다.  
@@ -51,7 +51,7 @@ learning rate가 클수록 θ 값이 크게 변하므로 cost function의 최소
 하지만 learning rate가 어느 정도 이상으로 커지면 다음과 같은 문제가 발생한다.  
 
 {: refdef: style="text-align: center;"}  
-![그림4](/img/posts/gradient-descent/gradient-descent-4.png){: width="75%" height="75%"}
+![그림4](/assets/img/posts/gradient-descent/gradient-descent-4.png){: width="75%" height="75%"}
 {: refdef}
 
 learning rate가 너무 커지면 위와 같이 최소값에 도달 하지 않을 수도 있다는 것이다.  
@@ -65,7 +65,7 @@ learning rate가 너무 커지면 위와 같이 최소값에 도달 하지 않�
 learning rate에 대해서는 다음 포스팅에서도 이야기를 할 것이다.  
 
 {: refdef: style="text-align: center;"}  
-![그림5](/img/posts/gradient-descent/gradient-descent-5.png){: width="85%" height="85%"}
+![그림5](/assets/img/posts/gradient-descent/gradient-descent-5.png){: width="85%" height="85%"}
 {: refdef}
 
 사실 위에서 보여준 예시는 다 Linear Regression이긴 한데, 눈으로 보여주기가 용이해서 예시를 든 것이지 다른 hypothesis function에도 똑같이 적용이 된다.  
@@ -77,7 +77,7 @@ learning rate에 대해서는 다음 포스팅에서도 이야기를 할 것이�
 traning set이 1개라고 했을 때, Cost function을 편미분한 값은 다음과 같다.  
 
 {: refdef: style="text-align: center;"}  
-![그림6](/img/posts/gradient-descent/gradient-descent-6.png){: width="55%" height="55%"}
+![그림6](/assets/img/posts/gradient-descent/gradient-descent-6.png){: width="55%" height="55%"}
 {: refdef}
 
 여기서 x<sub>0</sub>, x<sub>1</sub>은 편의상 h(x) = θ<sub>0</sub> + θ<sub>1</sub>x = θ<sub>0</sub>x<sub>0</sub> + θ<sub>1</sub>x<sub>1</sub>으로 표기했으며, x<sub>0</sub> = 1이다.  
@@ -85,7 +85,7 @@ traning set이 1개라고 했을 때, Cost function을 편미분한 값은 다�
 이를 Gradient Descent algorithm에 적용하면,  
 
 {: refdef: style="text-align: center;"}  
-![그림7](/img/posts/gradient-descent/gradient-descent-7.png){: width="65%" height="65%"}
+![그림7](/assets/img/posts/gradient-descent/gradient-descent-7.png){: width="65%" height="65%"}
 {: refdef}
 
 이렇게 나오는데 이 algorithm대로 θ를 구하면 된다.  
