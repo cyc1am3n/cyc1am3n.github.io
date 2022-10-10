@@ -1,0 +1,16 @@
+current directory: /Users/daeyoung/Documents/Github/cyc1am3n.github.io/_vendor/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+/usr/local/opt/ruby/bin/ruby -I /usr/local/Cellar/ruby/3.1.2_1/lib/ruby/3.1.0 -r ./siteconf20221010-33376-277k34.rb extconf.rb
+creating Makefile
+
+current directory: /Users/daeyoung/Documents/Github/cyc1am3n.github.io/_vendor/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= clean
+
+current directory: /Users/daeyoung/Documents/Github/cyc1am3n.github.io/_vendor/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\=
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.bundle
+
+current directory: /Users/daeyoung/Documents/Github/cyc1am3n.github.io/_vendor/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 fastfilereaderext.bundle ./.gem.20221010-33376-ctcypj
