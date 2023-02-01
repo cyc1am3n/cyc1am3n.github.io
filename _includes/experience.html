@@ -5,7 +5,9 @@
     <li class="meta">
       <p class="date">{{ exp.start }} &ndash; {{ exp.end }}</p>
       <p class="description">{{ exp.experience }}</p>
-      {{ exp.description }}
+      {% for item in exp.descriptions %}
+        <p class="sub-description"> {{ item }}</p>
+      {% endfor %}
     </li>
     {% endfor %}
   </ul>

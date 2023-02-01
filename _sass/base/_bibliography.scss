@@ -19,6 +19,9 @@ ol.bibliography{
         .title  {
             font-weight: bolder;
         }
+        div {
+            font-size: 1rem;
+        }
         .author  {
             a {
                 border-bottom: 1px dashed;
@@ -34,6 +37,11 @@ ol.bibliography{
         }
         .third-line {
             font-style: italic;
+        }
+        .fourth-line {
+            a:hover {
+                text-decoration: underline;
+            }
         }
         .hidden {
             font-size: 0.875rem;

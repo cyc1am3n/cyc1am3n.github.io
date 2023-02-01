@@ -3,7 +3,7 @@
   {{reference}}
 {%- else %}
   <!-- Title -->
-  <div class="title"><a href="{{entry.url}}">{{entry.title}}</a></div>
+  <div class="title">{{entry.title}}</div>
   <!-- Author -->
   <div class="author">
     {%- for author in entry.author_array -%}
@@ -70,6 +70,9 @@
       {%- capture thirdLine -%}Master's thesis, {{entry.school}}{%- endcapture -%}
     {%- endif -%}
   {%- endif -%}
+  {%- if entry.abbr -%}
+    {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}(<b>{{ entry.abbr }}</b>){%- endcapture -%}
+  {%- endif -%}
   {%- if entry.volume -%}
     {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}vol. {{ entry.volume }}{%- endcapture -%}
   {%- endif -%}
@@ -80,12 +83,27 @@
     {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}{{ entry.month | capitalize }}{%- endcapture -%}
   {%- endif -%}
   {%- if entry.year -%}
-    {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}{{ entry.year }}{%- endcapture -%}
+    {%- if entry.journal != "Under Review"-%}
+      {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}{{ entry.year }}{%- endcapture -%}
+    {%- endif -%}
   {%- endif -%}
   {%- if entry.etc -%}
-    {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}{{ entry.etc }}{%- endcapture -%}
+   {%- capture thirdLine -%}{{ thirdLine }}{% if thirdLine != blank %}, {% endif %}<span style="color:#f8766d;">{{ entry.etc }}</span>{%- endcapture -%}
   {%- endif -%}
   <div class="third-line">
     {{ thirdLine | strip }}
   </div>
+
+  <!-- HyperLinks -->
+  {% assign fourthLine = "" %}
+  {%- if entry.url -%}
+    {%- capture fourthLine -%}<a href="{{ entry.url }}", style="color:#674ea7;">[Paper]</a>{%- endcapture -%}
+  {%- endif -%}
+  {%- if entry.github -%}
+  {%- capture fourthLine -%}{{ fourthLine }}{% if fourthLine != blank %}&nbsp;&nbsp;{% endif %}<a href="{{ entry.github }}", style="color:#674ea7;">[GitHub]</a>{%- endcapture -%}
+  {%- endif -%}
+  <div class="fourth-line">
+    {{ fourthLine | strip }}
+  </div>
+
 {%- endif %}
