@@ -13,10 +13,10 @@ Gem::Specification.new do |s|
   s.email = ["http://sylvester.keil.or.at".freeze]
   s.homepage = "https://github.com/inukshuk/csl-styles".freeze
   s.licenses = ["CC-BY-SA-3.0".freeze]
-  s.rubygems_version = "3.3.11".freeze
+  s.rubygems_version = "3.3.26".freeze
   s.summary = "CSL styles and locales".freeze
 
-  s.installed_by_version = "3.3.11" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.3.26" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4

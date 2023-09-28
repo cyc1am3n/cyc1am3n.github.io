@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/inukshuk/csl-ruby".freeze
   s.licenses = ["AGPL-3.0".freeze, "BSD-2-Clause".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 2.2".freeze)
-  s.rubygems_version = "3.3.11".freeze
+  s.rubygems_version = "3.3.26".freeze
   s.summary = "A Ruby CSL parser and library".freeze
 
-  s.installed_by_version = "3.3.11" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.3.26" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4

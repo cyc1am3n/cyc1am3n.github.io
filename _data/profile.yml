@@ -4,6 +4,12 @@ description: >
   I am M.S Student at [KAIST Grduate school of AI](https://gsai.kaist.ac.kr/) advised by [Edward Choi](https://mp2893.com/). 
 webpage: https://cyc1am3n.github.io
 experience: # Remove for hiding the experience section
+  - start: 2023-02
+    end: Present
+    experience : NCSoft
+    descriptions:
+      - Instruction Tuning Large Language Model
+      - Human Alignment
   - start: 2022-07
     end: 2023-01
     experience : NAVER CLOVA, Research Engineer Intern
