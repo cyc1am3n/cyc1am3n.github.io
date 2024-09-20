@@ -30,8 +30,8 @@ experience: # Remove for hiding the experience section
     descriptions:
       - Zero-shot Text Summarization
 interests: # Remove for hiding the interests section
+  - Multi-modality in AI
   - Reliability of Machine Learning
-  - Natural Language Processing
   - Machine Learning for Healthcare
 # skills: # Remove for hiding the skills section
 #   - skill: HTML5 & CSS
