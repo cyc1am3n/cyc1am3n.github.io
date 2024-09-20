@@ -1,6 +1,6 @@
 # Publish to github pages on gh-pages branch
-# rm -r _vendor/
-# cp -r ../_vendor ./_vendor
+rm -r _vendor/
+cp -r ../_vendor ./_vendor
 
 if [ -n "$(git status --porcelain)" ]; then
   echo "Please commit all changes before publishing with this script"
@@ -22,7 +22,7 @@ if [ -d "_scripts/publish.d" ]; then
   rm -r "/tmp/publish.d"
   cp -r "_scripts/publish.d" "/tmp/publish.d"
 fi
-bundle install
+# bundle install
 bundle exec jekyll b -d /tmp/gh-pages-publish
 git ls-files -z -- . ':!:.git*' | xargs -0 rm -f
 cp -r /tmp/gh-pages-publish/* .
