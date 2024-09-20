@@ -26,9 +26,9 @@ bundle install
 bundle exec jekyll b -d /tmp/gh-pages-publish
 git ls-files -z -- . ':!:.git*' | xargs -0 rm -f
 cp -r /tmp/gh-pages-publish/* .
-for script in "/tmp/publish.d/*"; do
-  $script
-done
+# for script in "/tmp/publish.d/*"; do
+#   $script
+# done
 git add .
 git commit -m "publish commit ${commit_hash}"
 git push -u origin +gh-pages
