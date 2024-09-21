@@ -22,7 +22,10 @@ if [ -d "_scripts/publish.d" ]; then
   rm -r "/tmp/publish.d"
   cp -r "_scripts/publish.d" "/tmp/publish.d"
 fi
-bundle install
+# bundle install
+rm -r _vendor/
+cp -r ../_vendor ./_vendor
+
 bundle exec jekyll b -d /tmp/gh-pages-publish
 git ls-files -z -- . ':!:.git*' | xargs -0 rm -f
 cp -r /tmp/gh-pages-publish/* .
