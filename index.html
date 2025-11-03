@@ -231,8 +231,8 @@
             setTheme(newTheme);
         });
 
-        const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme');
 
         if (savedTheme) {
             setTheme(savedTheme);
@@ -241,6 +241,12 @@
         } else {
             setTheme('light');
         }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
     </script>
 </body>
 </html>
