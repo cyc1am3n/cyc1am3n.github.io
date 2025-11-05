@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:url" content="https://daeyoungkim.org">
+    <meta property="og:title" content="Daeyoung Kim">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://daeyoungkim.org/assets/favicon.png">
+    <meta property="og:description" content="Personal portfolio of Daeyoung Kim">
     <title>Daeyoung Kim</title>
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="https://bootswatch.com/4/litera/bootstrap.min.css">
@@ -104,6 +109,97 @@
         footer {
             background-color: var(--footer-bg-color);
         }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--card-border-color);
+            left: 20px;
+            top: 0;
+            bottom: 0;
+        }
+
+        .timeline-item {
+            padding: 1rem 0 1rem 60px;
+            position: relative;
+        }
+
+        .timeline-item-content {
+            position: relative;
+            background-color: var(--card-bg-color);
+            border-radius: .25rem;
+            padding: 1.5rem;
+            border: 1px solid var(--card-border-color);
+        }
+
+        .timeline-item-content::after, .timeline-item-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            left: -16px;
+            border-width: 8px 16px 8px 0;
+            border-color: transparent var(--card-border-color) transparent transparent;
+        }
+
+        .timeline-item-content::before {
+            left: -15px;
+            border-color: transparent var(--card-bg-color) transparent transparent;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--card-border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            transform: translateX(-50%);
+            left: 20px;
+        }
+
+        .timeline-icon i {
+            color: var(--bg-color);
+        }
+
+        .timeline-item .timeline-icon {
+            background-color: var(--card-border-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-icon {
+            background-color: #007bff; /* Primary Blue */
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        [data-theme="dark"] .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        [data-theme="dark"] .card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+        }
     </style>
 </head>
 <body data-spy="scroll" data-target="#navbar-example">
@@ -118,6 +214,9 @@
                 <ul class="navbar-nav flex-grow-1 justify-content-center">
                     <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#work-experience">Work Experience</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#publications">Publications</a>
@@ -180,7 +279,64 @@
         </div>
     </header>
 
-    <div id="publications" class="section section-dark">
+    <div id="work-experience" class="section section-dark">
+        <div class="container">
+            <h2 class="text-center mb-5">Work Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="timeline-item-content">
+                        <h5 class="card-title">KT (Korea Telecom)</h5>
+                        <p class="card-text"><strong>Research Engineer</strong> | Seoul, South Korea</p>
+                        <p class="card-text text-muted">Dec 2024 - Present</p>
+                        <ul>
+                            <li>Constructed synthetic document and instruction-tuning datasets for a Vision Language Model (VLM).</li>
+                            <li>Designed the core architecture and trained an omni-modal (image, text, speech) model.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="timeline-item-content">
+                        <h5 class="card-title">NCSOFT</h5>
+                        <p class="card-text"><strong>Research Engineer</strong> | Seongnam, South Korea</p>
+                        <p class="card-text text-muted">Feb 2023 - Dec 2024</p>
+                        <ul>
+                            <li>Managed the full training pipeline for <a href="https://huggingface.co/NCSOFT/VARCO-VISION-14B">VARCO-VISION</a>, a Vision Language Model (VLM)</li>
+                            <li>Developed <a href="https://youtu.be/M4K4ssuJiXo">VARCO-Text</a>, an LLM-based writing assistant, and its datasets</li>
+                            <li>Performed alignment tuning for <a href="https://ncsoft.github.io/ncresearch/varco-llm-details/">VARCO LLM 2.0</a> with custom Korean datasets</li>
+                            <li>Designed and built <a href="https://github.com/ncsoft/offsetbias">EvalBiasBench</a>, a benchmark to identify and mitigate LLM-as-an-Evaluator biases</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="timeline-item-content">
+                        <h5 class="card-title">NAVER Corporation</h5>
+                        <p class="card-text"><strong>Research Intern</strong> | Seongnam, South Korea</p>
+                        <p class="card-text text-muted">Jul 2022 - Jan 2023</p>
+                        <ul>
+                            <li>Scaled an LLM-based sentence embedding model from 137M to 7B parameters</li>
+                            <li>Developed a zero-shot text classification method using sentence encoders</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="timeline-item-content">
+                        <h5 class="card-title">NAVER Corporation</h5>
+                        <p class="card-text"><strong>Research Intern</strong> | Seongnam, South Korea</p>
+                        <p class="card-text text-muted">Jul 2020 - Aug 2020</p>
+                        <ul>
+                            <li>Developed a sentiment and intent classification model for online comments with custom data augmentation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="publications" class="section">
         <div class="container">
             <h2 class="text-center mb-5">Publications</h2>
             <p class="text-center text-muted mb-4">* denotes equal contribution.</p>
